@@ -1,2 +1,2 @@
 # RubiksCube
-Implementations of a Rubiks Cube in Python and in C++
+Implementation of a Rubiks Cube in python.
