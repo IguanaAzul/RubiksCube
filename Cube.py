@@ -74,7 +74,7 @@ notation = {'U':[0, 0], 'F':[1, 0], 'R':[2, 0], 'D':[3, 0], 'B':[4, 0], 'L':[5, 
             'U\'':[0, 1], 'F\'':[1, 1], 'R\'':[2, 1], 'D\'':[3, 1], 'B\'':[4, 1], 'L\'':[5, 1],
             'U2':[0, 2], 'F2':[1, 2], 'R2':[2, 2], 'D2':[3, 2], 'B2':[4, 2], 'L2':[5, 2]}
 
-class Cube:    
+class Cube:
     def __init__(self):
         self.setCube()
 
@@ -82,7 +82,7 @@ class Cube:
         self.matrixColors = matrixRef.copy()
         self.pieces = piecesRef.copy()
 
-    def turnFace(self, face, way):
+    def turnFace(self, face, way=0):
         turn = intFace[face]
         self.matrixColors[turn, 1], self.matrixColors[turn, 2], self.matrixColors[turn, 3], self.matrixColors[turn, 4] = swap4(self.matrixColors[turn, 1], 
         self.matrixColors[turn, 2], self.matrixColors[turn, 3], self.matrixColors[turn, 4], way)
@@ -242,7 +242,7 @@ class Cube:
         return k
     
     def printCube(self):
-        print("Estado atual do cubo: \n")
+        print("Cube: \n")
         print("      {0} {1} {2}".format(self.matrixColors[4, 8], self.matrixColors[4, 3], self.matrixColors[4, 7]))
         print("      {0} {1} {2}".format(self.matrixColors[4, 4], self.matrixColors[4, 0], self.matrixColors[4, 2]))
         print("      {0} {1} {2}".format(self.matrixColors[4, 5], self.matrixColors[4, 1], self.matrixColors[4, 6]))
