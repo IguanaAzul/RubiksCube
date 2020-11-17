@@ -8,6 +8,6 @@ setup(
     author='Ramon Griffo',
     author_email='ramon.griffo98@gmail.com',
     license='MIT License',
-    packages=['Cube'],
+    scripts=['Cube'],
     install_requires=['numpy'],
 )
