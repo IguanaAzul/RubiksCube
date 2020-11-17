@@ -4,7 +4,7 @@ setup(
     name='rubiks_cube',
     version='1.0.0',
     description='A Rubiks Cube Package for Python',
-    url='https://github.com/IguanaAzul/RubiksCube',
+    url='https://github.com/IguanaAzul/RubiksCube.git',
     author='Ramon Griffo',
     author_email='ramon.griffo98@gmail.com',
     license='MIT License',
