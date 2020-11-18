@@ -1,6 +1,9 @@
 # RubiksCube
 This library implements a 3x3x3 rubiks cube for general purpose in python.
 
+    pip install rubiks_cube
+
+
 It provides:
 
 - A Rubiks Cube implemented using numpy arrays
