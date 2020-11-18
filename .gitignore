@@ -30,3 +30,10 @@
 *.exe
 *.out
 *.app
+
+# Pypi Directories
+build
+dist
+rubiks_cube.egg-info
+/dist/
+/rubiks_cube.egg-info/
