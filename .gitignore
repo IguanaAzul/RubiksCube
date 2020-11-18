@@ -35,5 +35,7 @@
 build
 dist
 rubiks_cube.egg-info
-/dist/
-/rubiks_cube.egg-info/
+
+# Pycharm files
+__pycache__
+.idea
