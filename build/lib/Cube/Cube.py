@@ -242,7 +242,7 @@ class Cube:
         return k
     
     def printCube(self):
-        print("Cube: \n")
+        print("rubiks_cube: \n")
         print("      {0} {1} {2}".format(self.matrixColors[4, 8], self.matrixColors[4, 3], self.matrixColors[4, 7]))
         print("      {0} {1} {2}".format(self.matrixColors[4, 4], self.matrixColors[4, 0], self.matrixColors[4, 2]))
         print("      {0} {1} {2}".format(self.matrixColors[4, 5], self.matrixColors[4, 1], self.matrixColors[4, 6]))
