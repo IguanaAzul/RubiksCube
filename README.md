@@ -31,5 +31,6 @@ The following notations apply:
 Future implementations:
 - NxNxN cubes
 - Algorithms to solve the cubes
+- Fix scramble generator (It sometimes generates scrambles with less movements than requested)
 
-The file
+The file ./examples/example.py contains example usages of the library

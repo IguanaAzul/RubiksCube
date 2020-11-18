@@ -1,7 +1,7 @@
 README.md
 setup.py
-Cube/Cube.py
-Cube/__init__.py
+rubiks_cube/__init__.py
+rubiks_cube/rubiks_cube.py
 rubiks_cube.egg-info/PKG-INFO
 rubiks_cube.egg-info/SOURCES.txt
 rubiks_cube.egg-info/dependency_links.txt
