@@ -1,6 +1,5 @@
 import numpy as np
 from itertools import groupby
-import random
 
 
 matrix_ref = np.array([['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'], ['g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g'],
@@ -65,7 +64,7 @@ def scramble_generator(length):
     scramble = np.random.randint(6, size=length) + 1
     scramble = [k for k, g in groupby(scramble) if k != 0]
     for idx in range(len(scramble)):
-        odds = random.randint(0, 300)
+        odds = np.random.randint(0, 300)
         if odds < 100:
             scramble[idx] += 6
         elif odds < 200:
@@ -89,107 +88,219 @@ class Cube:
         :return: No return, the cube gets turned inplace.
         """
         turn = int_face[face]
-        self.matrix_colors[turn, 1], self.matrix_colors[turn, 2], self.matrix_colors[turn, 3], self.matrix_colors[turn, 4] = swap4(self.matrix_colors[turn, 1],
-        self.matrix_colors[turn, 2], self.matrix_colors[turn, 3], self.matrix_colors[turn, 4], way)
+        self.matrix_colors[turn, 1], self.matrix_colors[turn, 2], \
+            self.matrix_colors[turn, 3], self.matrix_colors[turn, 4] = swap4(self.matrix_colors[turn, 1],
+                                                                             self.matrix_colors[turn, 2],
+                                                                             self.matrix_colors[turn, 3],
+                                                                             self.matrix_colors[turn, 4],
+                                                                             way)
 
-        self.matrix_colors[turn, 5], self.matrix_colors[turn, 6], self.matrix_colors[turn, 7], self.matrix_colors[turn, 8] = swap4(self.matrix_colors[turn, 5],
-        self.matrix_colors[turn, 6], self.matrix_colors[turn, 7], self.matrix_colors[turn, 8], way)
+        self.matrix_colors[turn, 5], self.matrix_colors[turn, 6], \
+            self.matrix_colors[turn, 7], self.matrix_colors[turn, 8] = swap4(self.matrix_colors[turn, 5],
+                                                                             self.matrix_colors[turn, 6],
+                                                                             self.matrix_colors[turn, 7],
+                                                                             self.matrix_colors[turn, 8],
+                                                                             way)
         # UP
         if turn == 0:
-            self.pieces[0], self.pieces[1], self.pieces[2], self.pieces[3] = swap4(self.pieces[0], self.pieces[1], 
-                                                                               self.pieces[2], self.pieces[3], way)
+            self.pieces[0], self.pieces[1], self.pieces[2], self.pieces[3] = swap4(self.pieces[0], self.pieces[1],
+                                                                                   self.pieces[2], self.pieces[3],
+                                                                                   way)
 
-            self.pieces[12], self.pieces[13], self.pieces[14], self.pieces[15] = swap4(self.pieces[12], self.pieces[13], 
-                                                                                   self.pieces[14], self.pieces[15], way)
+            self.pieces[12], self.pieces[13], self.pieces[14], self.pieces[15] = swap4(self.pieces[12], self.pieces[13],
+                                                                                       self.pieces[14], self.pieces[15],
+                                                                                       way)
 
-            self.matrix_colors[1, 3], self.matrix_colors[2, 4], self.matrix_colors[4, 1], self.matrix_colors[5, 2] = swap4(self.matrix_colors[1, 3],
-            self.matrix_colors[2, 4], self.matrix_colors[4, 1], self.matrix_colors[5, 2], way)
+            self.matrix_colors[1, 3], self.matrix_colors[2, 4], \
+                self.matrix_colors[4, 1], self.matrix_colors[5, 2] = swap4(self.matrix_colors[1, 3],
+                                                                           self.matrix_colors[2, 4],
+                                                                           self.matrix_colors[4, 1],
+                                                                           self.matrix_colors[5, 2],
+                                                                           way)
 
-            self.matrix_colors[1, 7], self.matrix_colors[2, 8], self.matrix_colors[4, 5], self.matrix_colors[5, 6] = swap4(self.matrix_colors[1, 7],
-            self.matrix_colors[2, 8], self.matrix_colors[4, 5], self.matrix_colors[5, 6], way)
+            self.matrix_colors[1, 7], self.matrix_colors[2, 8], \
+                self.matrix_colors[4, 5], self.matrix_colors[5, 6] = swap4(self.matrix_colors[1, 7],
+                                                                           self.matrix_colors[2, 8],
+                                                                           self.matrix_colors[4, 5],
+                                                                           self.matrix_colors[5, 6],
+                                                                           way)
 
-            self.matrix_colors[1, 8], self.matrix_colors[2, 5], self.matrix_colors[4, 6], self.matrix_colors[5, 7] = swap4(self.matrix_colors[1, 8],
-            self.matrix_colors[2, 5], self.matrix_colors[4, 6], self.matrix_colors[5, 7], way)
+            self.matrix_colors[1, 8], self.matrix_colors[2, 5], \
+                self.matrix_colors[4, 6], self.matrix_colors[5, 7] = swap4(self.matrix_colors[1, 8],
+                                                                           self.matrix_colors[2, 5],
+                                                                           self.matrix_colors[4, 6],
+                                                                           self.matrix_colors[5, 7],
+                                                                           way)
         # FRONT
         elif turn == 1:
-            self.pieces[8], self.pieces[5], self.pieces[0], self.pieces[4] = swap4(self.pieces[8], self.pieces[5], 
-                                                                               self.pieces[0], self.pieces[4], way)
+            self.pieces[8], self.pieces[5], self.pieces[0], self.pieces[4] = swap4(self.pieces[8],
+                                                                                   self.pieces[5],
+                                                                                   self.pieces[0],
+                                                                                   self.pieces[4],
+                                                                                   way)
 
-            self.pieces[16], self.pieces[17], self.pieces[13], self.pieces[12] = swap4(self.pieces[16], self.pieces[17], 
-                                                                                   self.pieces[13], self.pieces[12], way)
+            self.pieces[16], self.pieces[17], self.pieces[13], self.pieces[12] = swap4(self.pieces[16],
+                                                                                       self.pieces[17],
+                                                                                       self.pieces[13],
+                                                                                       self.pieces[12],
+                                                                                       way)
 
-            self.matrix_colors[3, 1], self.matrix_colors[2, 1], self.matrix_colors[0, 1], self.matrix_colors[5, 1] = swap4(self.matrix_colors[3, 1],
-            self.matrix_colors[2, 1], self.matrix_colors[0, 1], self.matrix_colors[5, 1], way)
+            self.matrix_colors[3, 1], self.matrix_colors[2, 1], \
+                self.matrix_colors[0, 1], self.matrix_colors[5, 1] = swap4(self.matrix_colors[3, 1],
+                                                                           self.matrix_colors[2, 1],
+                                                                           self.matrix_colors[0, 1],
+                                                                           self.matrix_colors[5, 1],
+                                                                           way)
 
-            self.matrix_colors[3, 5], self.matrix_colors[2, 5], self.matrix_colors[0, 5], self.matrix_colors[5, 5] = swap4(self.matrix_colors[3, 5],
-            self.matrix_colors[2, 5], self.matrix_colors[0, 5], self.matrix_colors[5, 5], way)
+            self.matrix_colors[3, 5], self.matrix_colors[2, 5], \
+                self.matrix_colors[0, 5], self.matrix_colors[5, 5] = swap4(self.matrix_colors[3, 5],
+                                                                           self.matrix_colors[2, 5],
+                                                                           self.matrix_colors[0, 5],
+                                                                           self.matrix_colors[5, 5],
+                                                                           way)
 
-            self.matrix_colors[3, 6], self.matrix_colors[2, 6], self.matrix_colors[0, 6], self.matrix_colors[5, 6] = swap4(self.matrix_colors[3, 6],
-            self.matrix_colors[2, 6], self.matrix_colors[0, 6], self.matrix_colors[5, 6], way)
+            self.matrix_colors[3, 6], self.matrix_colors[2, 6], \
+                self.matrix_colors[0, 6], self.matrix_colors[5, 6] = swap4(self.matrix_colors[3, 6],
+                                                                           self.matrix_colors[2, 6],
+                                                                           self.matrix_colors[0, 6],
+                                                                           self.matrix_colors[5, 6],
+                                                                           way)
         # RIGHT
         elif turn == 2:
-            self.pieces[1], self.pieces[5], self.pieces[9], self.pieces[6] = swap4(self.pieces[1], self.pieces[5], 
-                                                                               self.pieces[9], self.pieces[6], way)
+            self.pieces[1], self.pieces[5], self.pieces[9], self.pieces[6] = swap4(self.pieces[1],
+                                                                                   self.pieces[5],
+                                                                                   self.pieces[9],
+                                                                                   self.pieces[6],
+                                                                                   way)
 
-            self.pieces[17], self.pieces[18], self.pieces[14], self.pieces[13] = swap4(self.pieces[17], self.pieces[18], 
-                                                                                   self.pieces[14], self.pieces[13], way)
+            self.pieces[17], self.pieces[18], self.pieces[14], self.pieces[13] = swap4(self.pieces[17],
+                                                                                       self.pieces[18],
+                                                                                       self.pieces[14],
+                                                                                       self.pieces[13],
+                                                                                       way)
 
-            self.matrix_colors[0, 2], self.matrix_colors[1, 2], self.matrix_colors[3, 4], self.matrix_colors[4, 2] = swap4(self.matrix_colors[0, 2],
-            self.matrix_colors[1, 2], self.matrix_colors[3, 4], self.matrix_colors[4, 2], way)
+            self.matrix_colors[0, 2], self.matrix_colors[1, 2], \
+                self.matrix_colors[3, 4], self.matrix_colors[4, 2] = swap4(self.matrix_colors[0, 2],
+                                                                           self.matrix_colors[1, 2],
+                                                                           self.matrix_colors[3, 4],
+                                                                           self.matrix_colors[4, 2],
+                                                                           way)
 
-            self.matrix_colors[0, 6], self.matrix_colors[1, 6], self.matrix_colors[3, 8], self.matrix_colors[4, 6] = swap4(self.matrix_colors[0, 6],
-            self.matrix_colors[1, 6], self.matrix_colors[3, 8], self.matrix_colors[4, 6], way)
+            self.matrix_colors[0, 6], self.matrix_colors[1, 6], \
+                self.matrix_colors[3, 8], self.matrix_colors[4, 6] = swap4(self.matrix_colors[0, 6],
+                                                                           self.matrix_colors[1, 6],
+                                                                           self.matrix_colors[3, 8],
+                                                                           self.matrix_colors[4, 6],
+                                                                           way)
 
-            self.matrix_colors[0, 7], self.matrix_colors[1, 7], self.matrix_colors[3, 5], self.matrix_colors[4, 7] = swap4(self.matrix_colors[0, 7],
-            self.matrix_colors[1, 7], self.matrix_colors[3, 5], self.matrix_colors[4, 7], way)
+            self.matrix_colors[0, 7], self.matrix_colors[1, 7], \
+                self.matrix_colors[3, 5], self.matrix_colors[4, 7] = swap4(self.matrix_colors[0, 7],
+                                                                           self.matrix_colors[1, 7],
+                                                                           self.matrix_colors[3, 5],
+                                                                           self.matrix_colors[4, 7],
+                                                                           way)
         # DOWN
         elif turn == 3:
-            self.pieces[11], self.pieces[10], self.pieces[9], self.pieces[8] = swap4(self.pieces[11], self.pieces[10], 
-                                                                                 self.pieces[9], self.pieces[8], way)
+            self.pieces[11], self.pieces[10], self.pieces[9], self.pieces[8] = swap4(self.pieces[11],
+                                                                                     self.pieces[10],
+                                                                                     self.pieces[9],
+                                                                                     self.pieces[8],
+                                                                                     way)
 
-            self.pieces[19], self.pieces[18], self.pieces[17], self.pieces[16] = swap4(self.pieces[19], self.pieces[18], 
-                                                                                   self.pieces[17], self.pieces[16], way)
+            self.pieces[19], self.pieces[18], self.pieces[17], self.pieces[16] = swap4(self.pieces[19],
+                                                                                       self.pieces[18],
+                                                                                       self.pieces[17],
+                                                                                       self.pieces[16],
+                                                                                       way)
 
-            self.matrix_colors[1, 1], self.matrix_colors[5, 4], self.matrix_colors[4, 3], self.matrix_colors[2, 2] = swap4(self.matrix_colors[1, 1],
-            self.matrix_colors[5, 4], self.matrix_colors[4, 3], self.matrix_colors[2, 2], way)
+            self.matrix_colors[1, 1], self.matrix_colors[5, 4], \
+                self.matrix_colors[4, 3], self.matrix_colors[2, 2] = swap4(self.matrix_colors[1, 1],
+                                                                           self.matrix_colors[5, 4],
+                                                                           self.matrix_colors[4, 3],
+                                                                           self.matrix_colors[2, 2],
+                                                                           way)
 
-            self.matrix_colors[5, 8], self.matrix_colors[4, 7], self.matrix_colors[2, 6], self.matrix_colors[1, 5] = swap4(self.matrix_colors[5, 8],
-            self.matrix_colors[4, 7], self.matrix_colors[2, 6], self.matrix_colors[1, 5], way)
+            self.matrix_colors[5, 8], self.matrix_colors[4, 7], \
+                self.matrix_colors[2, 6], self.matrix_colors[1, 5] = swap4(self.matrix_colors[5, 8],
+                                                                           self.matrix_colors[4, 7],
+                                                                           self.matrix_colors[2, 6],
+                                                                           self.matrix_colors[1, 5],
+                                                                           way)
 
-            self.matrix_colors[5, 5], self.matrix_colors[4, 8], self.matrix_colors[2, 7], self.matrix_colors[1, 6] = swap4(self.matrix_colors[5, 5],
-            self.matrix_colors[4, 8], self.matrix_colors[2, 7], self.matrix_colors[1, 6], way)
+            self.matrix_colors[5, 5], self.matrix_colors[4, 8], \
+                self.matrix_colors[2, 7], self.matrix_colors[1, 6] = swap4(self.matrix_colors[5, 5],
+                                                                           self.matrix_colors[4, 8],
+                                                                           self.matrix_colors[2, 7],
+                                                                           self.matrix_colors[1, 6],
+                                                                           way)
         # BACK
         elif turn == 4:
-            self.pieces[2], self.pieces[6], self.pieces[10], self.pieces[7] = swap4(self.pieces[2], self.pieces[6], 
-                                                                                self.pieces[10], self.pieces[7], way)
+            self.pieces[2], self.pieces[6], self.pieces[10], self.pieces[7] = swap4(self.pieces[2],
+                                                                                    self.pieces[6],
+                                                                                    self.pieces[10],
+                                                                                    self.pieces[7],
+                                                                                    way)
 
-            self.pieces[14], self.pieces[15], self.pieces[18], self.pieces[19] = swap4(self.pieces[14], self.pieces[15], 
-                                                                                   self.pieces[18], self.pieces[19], way)
+            self.pieces[14], self.pieces[15], self.pieces[18], self.pieces[19] = swap4(self.pieces[14],
+                                                                                       self.pieces[15],
+                                                                                       self.pieces[18],
+                                                                                       self.pieces[19],
+                                                                                       way)
 
-            self.matrix_colors[0, 3], self.matrix_colors[2, 3], self.matrix_colors[3, 3], self.matrix_colors[5, 3] = swap4(self.matrix_colors[0, 3],
-            self.matrix_colors[2, 3], self.matrix_colors[3, 3], self.matrix_colors[5, 3], way)
+            self.matrix_colors[0, 3], self.matrix_colors[2, 3], \
+                self.matrix_colors[3, 3], self.matrix_colors[5, 3] = swap4(self.matrix_colors[0, 3],
+                                                                           self.matrix_colors[2, 3],
+                                                                           self.matrix_colors[3, 3],
+                                                                           self.matrix_colors[5, 3],
+                                                                           way)
 
-            self.matrix_colors[0, 8], self.matrix_colors[2, 8], self.matrix_colors[3, 8], self.matrix_colors[5, 8] = swap4(self.matrix_colors[0, 8],
-            self.matrix_colors[2, 8], self.matrix_colors[3, 8], self.matrix_colors[5, 8], way)
+            self.matrix_colors[0, 8], self.matrix_colors[2, 8], \
+                self.matrix_colors[3, 8], self.matrix_colors[5, 8] = swap4(self.matrix_colors[0, 8],
+                                                                           self.matrix_colors[2, 8],
+                                                                           self.matrix_colors[3, 8],
+                                                                           self.matrix_colors[5, 8],
+                                                                           way)
 
-            self.matrix_colors[0, 7], self.matrix_colors[2, 7], self.matrix_colors[3, 7], self.matrix_colors[5, 7] = swap4(self.matrix_colors[0, 7],
-            self.matrix_colors[2, 7], self.matrix_colors[3, 7], self.matrix_colors[5, 7], way)
+            self.matrix_colors[0, 7], self.matrix_colors[2, 7], \
+                self.matrix_colors[3, 7], self.matrix_colors[5, 7] = swap4(self.matrix_colors[0, 7],
+                                                                           self.matrix_colors[2, 7],
+                                                                           self.matrix_colors[3, 7],
+                                                                           self.matrix_colors[5, 7],
+                                                                           way)
         # LEFT
         elif turn == 5:
-            self.pieces[3], self.pieces[7], self.pieces[11], self.pieces[4] = swap4(self.pieces[3], self.pieces[7], 
-                                                                                self.pieces[11], self.pieces[4], way)
+            self.pieces[3], self.pieces[7], self.pieces[11], self.pieces[4] = swap4(self.pieces[3],
+                                                                                    self.pieces[7],
+                                                                                    self.pieces[11],
+                                                                                    self.pieces[4],
+                                                                                    way)
 
-            self.pieces[12], self.pieces[15], self.pieces[19], self.pieces[16] = swap4(self.pieces[12], self.pieces[15], 
-                                                                                   self.pieces[19], self.pieces[16], way)
+            self.pieces[12], self.pieces[15], self.pieces[19], self.pieces[16] = swap4(self.pieces[12],
+                                                                                       self.pieces[15],
+                                                                                       self.pieces[19],
+                                                                                       self.pieces[16],
+                                                                                       way)
 
-            self.matrix_colors[0, 4], self.matrix_colors[4, 4], self.matrix_colors[3, 2], self.matrix_colors[1, 4] = swap4(self.matrix_colors[0, 4],
-            self.matrix_colors[4, 4], self.matrix_colors[3, 2], self.matrix_colors[1, 4], way)
+            self.matrix_colors[0, 4], self.matrix_colors[4, 4], \
+                self.matrix_colors[3, 2], self.matrix_colors[1, 4] = swap4(self.matrix_colors[0, 4],
+                                                                           self.matrix_colors[4, 4],
+                                                                           self.matrix_colors[3, 2],
+                                                                           self.matrix_colors[1, 4],
+                                                                           way)
 
-            self.matrix_colors[1, 8], self.matrix_colors[0, 8], self.matrix_colors[4, 8], self.matrix_colors[3, 6] = swap4(self.matrix_colors[1, 8],
-            self.matrix_colors[0, 8], self.matrix_colors[4, 8], self.matrix_colors[3, 6], way)
+            self.matrix_colors[1, 8], self.matrix_colors[0, 8], \
+                self.matrix_colors[4, 8], self.matrix_colors[3, 6] = swap4(self.matrix_colors[1, 8],
+                                                                           self.matrix_colors[0, 8],
+                                                                           self.matrix_colors[4, 8],
+                                                                           self.matrix_colors[3, 6],
+                                                                           way)
 
-            self.matrix_colors[1, 5], self.matrix_colors[0, 5], self.matrix_colors[4, 5], self.matrix_colors[3, 7] = swap4(self.matrix_colors[1, 5],
-            self.matrix_colors[0, 5], self.matrix_colors[4, 5], self.matrix_colors[3, 7], way)
+            self.matrix_colors[1, 5], self.matrix_colors[0, 5], \
+                self.matrix_colors[4, 5], self.matrix_colors[3, 7] = swap4(self.matrix_colors[1, 5],
+                                                                           self.matrix_colors[0, 5],
+                                                                           self.matrix_colors[4, 5],
+                                                                           self.matrix_colors[3, 7],
+                                                                           way)
 
     def is_solved(self):
         """
@@ -261,7 +372,7 @@ class Cube:
                 elif idx == 19 and self.matrix_colors[3, 7] == 'y':
                     k += 1
         return k
-    
+
     def print_cube(self):
         """
         Prints the state of the rubiks cube.
@@ -272,18 +383,21 @@ class Cube:
         print("      {0} {1} {2}".format(self.matrix_colors[4, 4], self.matrix_colors[4, 0], self.matrix_colors[4, 2]))
         print("      {0} {1} {2}".format(self.matrix_colors[4, 5], self.matrix_colors[4, 1], self.matrix_colors[4, 6]))
         print("      -----")
-        print("{0} {1} {2}|".format(self.matrix_colors[5, 8], self.matrix_colors[5, 3], self.matrix_colors[5, 7]), end='')
-        print("{0} {1} {2}|".format(self.matrix_colors[0, 8], self.matrix_colors[0, 3], self.matrix_colors[0, 7]), end='')
-        print("{0} {1} {2}|".format(self.matrix_colors[2, 8], self.matrix_colors[2, 3], self.matrix_colors[2, 7]), end='')
-        print("{0} {1} {2}".format(self.matrix_colors[3, 8], self.matrix_colors[3, 3], self.matrix_colors[3, 7]))
-        print("{0} {1} {2}|".format(self.matrix_colors[5, 4], self.matrix_colors[5, 0], self.matrix_colors[5, 2]), end='')
-        print("{0} {1} {2}|".format(self.matrix_colors[0, 4], self.matrix_colors[0, 0], self.matrix_colors[0, 2]), end='')
-        print("{0} {1} {2}|".format(self.matrix_colors[2, 4], self.matrix_colors[2, 0], self.matrix_colors[2, 2]), end='')
-        print("{0} {1} {2} ".format(self.matrix_colors[3, 4], self.matrix_colors[3, 0], self.matrix_colors[3, 2]))
-        print("{0} {1} {2}|".format(self.matrix_colors[5, 5], self.matrix_colors[5, 1], self.matrix_colors[5, 6]), end='')
-        print("{0} {1} {2}|".format(self.matrix_colors[0, 5], self.matrix_colors[0, 1], self.matrix_colors[0, 6]), end='')
-        print("{0} {1} {2}|".format(self.matrix_colors[2, 5], self.matrix_colors[2, 1], self.matrix_colors[2, 6]), end='')
-        print("{0} {1} {2} ".format(self.matrix_colors[3, 5], self.matrix_colors[3, 1], self.matrix_colors[3, 6]))
+        print("{0} {1} {2}|{3} {4} {5}|{6} {7} {8}|{9} {10} {11}"
+              .format(self.matrix_colors[5, 8], self.matrix_colors[5, 3], self.matrix_colors[5, 7],
+                      self.matrix_colors[0, 8], self.matrix_colors[0, 3], self.matrix_colors[0, 7],
+                      self.matrix_colors[2, 8], self.matrix_colors[2, 3], self.matrix_colors[2, 7],
+                      self.matrix_colors[3, 8], self.matrix_colors[3, 3], self.matrix_colors[3, 7]))
+        print("{0} {1} {2}|{3} {4} {5}|{6} {7} {8}|{9} {10} {11}"
+              .format(self.matrix_colors[5, 4], self.matrix_colors[5, 0], self.matrix_colors[5, 2],
+                      self.matrix_colors[0, 4], self.matrix_colors[0, 0], self.matrix_colors[0, 2],
+                      self.matrix_colors[2, 4], self.matrix_colors[2, 0], self.matrix_colors[2, 2],
+                      self.matrix_colors[3, 4], self.matrix_colors[3, 0], self.matrix_colors[3, 2]))
+        print("{0} {1} {2}|{3} {4} {5}|{6} {7} {8}|{9} {10} {11}"
+              .format(self.matrix_colors[5, 5], self.matrix_colors[5, 1], self.matrix_colors[5, 6],
+                      self.matrix_colors[0, 5], self.matrix_colors[0, 1], self.matrix_colors[0, 6],
+                      self.matrix_colors[2, 5], self.matrix_colors[2, 1], self.matrix_colors[2, 6],
+                      self.matrix_colors[3, 5], self.matrix_colors[3, 1], self.matrix_colors[3, 6]))
         print("      -----")
         print("      {0} {1} {2}".format(self.matrix_colors[1, 8], self.matrix_colors[1, 3], self.matrix_colors[1, 7]))
         print("      {0} {1} {2}".format(self.matrix_colors[1, 4], self.matrix_colors[1, 0], self.matrix_colors[1, 2]))
@@ -349,13 +463,13 @@ class Cube:
                     if self.matrix_colors[i][j] == 'w':
                         binary_matrix[(j-1)*6+i*48] = 1 * m
                     elif self.matrix_colors[i][j] == 'g':
-                        binary_matrix[(j-1)*6+1+i*48]=1 * m
+                        binary_matrix[(j-1)*6+1+i*48] = 1 * m
                     elif self.matrix_colors[i][j] == 'r':
-                        binary_matrix[(j-1)*6+2+i*48]=1 * m
+                        binary_matrix[(j-1)*6+2+i*48] = 1 * m
                     elif self.matrix_colors[i][j] == 'y':
-                        binary_matrix[(j-1)*6+3+i*48]=1 * m
+                        binary_matrix[(j-1)*6+3+i*48] = 1 * m
                     elif self.matrix_colors[i][j] == 'b':
-                        binary_matrix[(j-1)*6+4+i*48]=1 * m
+                        binary_matrix[(j-1)*6+4+i*48] = 1 * m
                     elif self.matrix_colors[i][j] == 'o':
-                        binary_matrix[(j-1)*6+5+i*48]=1 * m
+                        binary_matrix[(j-1)*6+5+i*48] = 1 * m
         return binary_matrix
