@@ -26,7 +26,7 @@ The following notations apply:
 | g      | Green  |
 | o      | Orange |
 | y      | Yellow |
-| b      | Back   |
+| b      | Blue   |
 
 Future implementations:
 - NxNxN cubes
