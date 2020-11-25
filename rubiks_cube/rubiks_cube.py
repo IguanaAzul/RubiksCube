@@ -434,12 +434,32 @@ class Cube:
             cubestring += cube_matrix[3, 7] + cube_matrix[4, 6] + cube_matrix[2, 6]
 
         elif how == "colorsURFDLB_g0":
-            cube_matrix = np.array([to_cubestring[color] for color in self.matrix_colors.copy().reshape(-1)])\
-                .reshape((6, 9))
-            cubestring = ""
-            for face in [4, 2, 0, 1, 5, 3]:
-                for position in [8, 3, 7, 4, 0, 2, 5, 1, 6]:
-                    cubestring += cube_matrix[face, position]
+            if self.matrix_colors[0, 0] != "g":
+                print("Error: This option requires the cube to be in the color_0=\"g\" option")
+                print("Use cube.change(to=\"g\") or use colorsURFDLB "
+                      "(The results are not the same, know what you want and what you are doing).")
+                return
+            else:
+                cube_matrix = np.array([to_cubestring[color] for color in self.matrix_colors.copy().reshape(-1)])\
+                    .reshape((6, 9))
+                cubestring = ""
+                for face in [4, 2, 0, 1, 5, 3]:
+                    for position in [8, 3, 7, 4, 0, 2, 5, 1, 6]:
+                        cubestring += cube_matrix[face, position]
+
+        elif how == "colorsURFDLB":
+            if self.matrix_colors[0, 0] != "w":
+                print("Error: This option requires the cube to be in the color_0=\"w\" option, it is default")
+                print("Use cube.change(to=\"w\") or use colorsURFDLB_g0 "
+                      "(The results are not the same, know what you want and what you are doing).")
+                return
+            else:
+                cube_matrix = np.array([to_cubestring[color] for color in self.matrix_colors.copy().reshape(-1)])\
+                    .reshape((6, 9))
+                cubestring = ""
+                for face in [0, 2, 1, 3, 5, 4]:
+                    for position in [8, 3, 7, 4, 0, 2, 5, 1, 6]:
+                        cubestring += cube_matrix[face, position]
 
         else:
             print("Error: format uknown.")
