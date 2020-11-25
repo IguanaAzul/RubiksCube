@@ -92,6 +92,7 @@ class Cube:
         self.matrix_colors = matrix_ref.copy()
         self.pieces = pieces_ref.copy()
         self.matrix_set = False
+        self.cube_loaded = False
 
     def turn_face(self, face, way=0):
         """
@@ -337,6 +338,8 @@ class Cube:
         if self.matrix_set:
             print("You set the color_matrix yourself, so pieces positions aren't tracked")
             return None
+        if self.cube_loaded:
+            print("You loaded a cube, if it had wrong pieces, you'll get wrong results")
         else:
             return sum(np.all(self.pieces == pieces_ref, axis=1))
 
@@ -348,6 +351,8 @@ class Cube:
         if self.matrix_set:
             print("You set the color_matrix yourself, so pieces positions aren't tracked")
             return None
+        if self.cube_loaded:
+            print("You loaded a cube, if it had wrong pieces, you'll get wrong results")
         else:
             k = 0
             for idx, i in enumerate(np.all(self.pieces == pieces_ref, axis=1)):
@@ -599,3 +604,4 @@ class Cube:
         for i in range(6):
             for j in range(1, 9):
                 self.matrix_colors[i][j] = bin_to_color[tuple(binary_array[i*8+(j-1)])]
+        self.cube_loaded = True
