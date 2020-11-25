@@ -2,39 +2,49 @@ import numpy as np
 from itertools import groupby
 
 
-matrix_ref = np.array([['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'], ['g', 'g', 'g', 'g', 'g', 'g', 'g', 'g', 'g'],
-                       ['r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r'], ['y', 'y', 'y', 'y', 'y', 'y', 'y', 'y', 'y'],
-                       ['b', 'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'], ['o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o']])
+matrix_ref = np.array([["w", "w", "w", "w", "w", "w", "w", "w", "w"], ["g", "g", "g", "g", "g", "g", "g", "g", "g"],
+                       ["r", "r", "r", "r", "r", "r", "r", "r", "r"], ["y", "y", "y", "y", "y", "y", "y", "y", "y"],
+                       ["b", "b", "b", "b", "b", "b", "b", "b", "b"], ["o", "o", "o", "o", "o", "o", "o", "o", "o"]])
 
-pieces_ref = np.array([[1, 'w', 'g', None], [1, 'w', 'r', None], [1, 'w', 'b', None], [1, 'w', 'o', None],
-                       [1, 'g', 'o', None], [1, 'g', 'r', None], [1, 'r', 'b', None], [1, 'b', 'o', None],
-                       [1, 'y', 'g', None], [1, 'y', 'r', None], [1, 'y', 'b', None], [1, 'y', 'o', None],
-                       [2, 'w', 'g', 'o'], [2, 'w', 'g', 'r'], [2, 'w', 'b', 'r'], [2, 'w', 'b', 'o'],
-                       [2, 'y', 'g', 'o'], [2, 'y', 'g', 'r'], [2, 'y', 'b', 'r'], [2, 'y', 'b', 'o']])
+pieces_ref = np.array([[1, "w", "g", None], [1, "w", "r", None], [1, "w", "b", None], [1, "w", "o", None],
+                       [1, "g", "o", None], [1, "g", "r", None], [1, "r", "b", None], [1, "b", "o", None],
+                       [1, "y", "g", None], [1, "y", "r", None], [1, "y", "b", None], [1, "y", "o", None],
+                       [2, "w", "g", "o"], [2, "w", "g", "r"], [2, "w", "b", "r"], [2, "w", "b", "o"],
+                       [2, "y", "g", "o"], [2, "y", "g", "r"], [2, "y", "b", "r"], [2, "y", "b", "o"]])
 
-pieces_to_num = {(1, 'w', 'g', None): 0, (1, 'w', 'r', None): 1, (1, 'w', 'b', None): 2, (1, 'w', 'o', None): 3,
-                 (1, 'g', 'o', None): 4, (1, 'g', 'r', None): 5, (1, 'r', 'b', None): 6, (1, 'b', 'o', None): 7,
-                 (1, 'y', 'g', None): 8, (1, 'y', 'r', None): 9, (1, 'y', 'b', None): 10, (1, 'y', 'o', None): 11,
-                 (2, 'w', 'g', 'o'): 12, (2, 'w', 'g', 'r'): 13, (2, 'w', 'b', 'r'): 14, (2, 'w', 'b', 'o'): 15,
-                 (2, 'y', 'g', 'o'): 16, (2, 'y', 'g', 'r'): 17, (2, 'y', 'b', 'r'): 18, (2, 'y', 'b', 'o'): 19}
+pieces_to_num = {(1, "w", "g", None): 0, (1, "w", "r", None): 1, (1, "w", "b", None): 2, (1, "w", "o", None): 3,
+                 (1, "g", "o", None): 4, (1, "g", "r", None): 5, (1, "r", "b", None): 6, (1, "b", "o", None): 7,
+                 (1, "y", "g", None): 8, (1, "y", "r", None): 9, (1, "y", "b", None): 10, (1, "y", "o", None): 11,
+                 (2, "w", "g", "o"): 12, (2, "w", "g", "r"): 13, (2, "w", "b", "r"): 14, (2, "w", "b", "o"): 15,
+                 (2, "y", "g", "o"): 16, (2, "y", "g", "r"): 17, (2, "y", "b", "r"): 18, (2, "y", "b", "o"): 19}
 
-num_to_pieces = {0: [1, 'w', 'g', None], 1: [1, 'w', 'r', None], 2: [1, 'w', 'b', None], 3: [1, 'w', 'o', None],
-                 4: [1, 'g', 'o', None], 5: [1, 'g', 'r', None], 6: [1, 'r', 'b', None], 7: [1, 'b', 'o', None],
-                 8: [1, 'y', 'g', None], 9: [1, 'y', 'r', None], 10: [1, 'y', 'b', None], 11: [1, 'y', 'o', None],
-                 12: [2, 'w', 'g', 'o'], 13: [2, 'w', 'g', 'r'], 14: [2, 'w', 'b', 'r'], 15: [2, 'w', 'b', 'o'],
-                 16: [2, 'y', 'g', 'o'], 17: [2, 'y', 'g', 'r'], 18: [2, 'y', 'b', 'r'], 19: [2, 'y', 'b', 'o']}
+num_to_pieces = {0: [1, "w", "g", None], 1: [1, "w", "r", None], 2: [1, "w", "b", None], 3: [1, "w", "o", None],
+                 4: [1, "g", "o", None], 5: [1, "g", "r", None], 6: [1, "r", "b", None], 7: [1, "b", "o", None],
+                 8: [1, "y", "g", None], 9: [1, "y", "r", None], 10: [1, "y", "b", None], 11: [1, "y", "o", None],
+                 12: [2, "w", "g", "o"], 13: [2, "w", "g", "r"], 14: [2, "w", "b", "r"], 15: [2, "w", "b", "o"],
+                 16: [2, "y", "g", "o"], 17: [2, "y", "g", "r"], 18: [2, "y", "b", "r"], 19: [2, "y", "b", "o"]}
 
 bin_to_color = {(0, 0, 0): "w", (0, 1, 0): "g", (0, 1, 1): "r", (1, 0, 0): "y", (1, 0, 1): "b", (1, 1, 0): "o"}
 
-to_int = {'w': 0, 'g': 1, 'r': 2, 'y': 3, 'b': 4, 'o': 5, 0: 0, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5}
-to_color = {0: 'w', 1: 'g', 2: 'r', 3: 'y', 4: 'b', 5: 'o', 'w': 'w', 'g': 'g', 'r': 'r', 'y': 'y', 'b': 'b', 'o': 'o'}
-char_face = {0: 'U', 1: 'F', 2: 'R', 3: 'D', 4: 'B', 5: 'L', 'U': 'U', 'F': 'F', 'R': 'R', 'D': 'D', 'B': 'B', 'L': 'L'}
-int_face = {'U': 0, 'F': 1, 'R': 2, 'D': 3, 'B': 4, 'L': 5, 0: 0, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5}
-notation = {'U': [0, 0], 'F': [1, 0], 'R': [2, 0], 'D': [3, 0], 'B': [4, 0], 'L': [5, 0],
-            'U\'': [0, 1], 'F\'': [1, 1], 'R\'': [2, 1], 'D\'': [3, 1], 'B\'': [4, 1], 'L\'': [5, 1],
-            'U2': [0, 2], 'F2': [1, 2], 'R2': [2, 2], 'D2': [3, 2], 'B2': [4, 2], 'L2': [5, 2]}
+to_int = {"w": 0, "g": 1, "r": 2, "y": 3, "b": 4, "o": 5, 0: 0, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5}
+
+to_color = {0: "w", 1: "g", 2: "r", 3: "y", 4: "b", 5: "o", "w": "w", "g": "g", "r": "r", "y": "y", "b": "b", "o": "o"}
+
+char_face = {0: "U", 1: "F", 2: "R", 3: "D", 4: "B", 5: "L", "U": "U", "F": "F", "R": "R", "D": "D", "B": "B", "L": "L"}
+
+int_face = {"U": 0, "F": 1, "R": 2, "D": 3, "B": 4, "L": 5, 0: 0, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5}
+
+notation = {"U": [0, 0], "F": [1, 0], "R": [2, 0], "D": [3, 0], "B": [4, 0], "L": [5, 0],
+            "U\'": [0, 1], "F\'": [1, 1], "R\'": [2, 1], "D\'": [3, 1], "B\'": [4, 1], "L\'": [5, 1],
+            "U2": [0, 2], "F2": [1, 2], "R2": [2, 2], "D2": [3, 2], "B2": [4, 2], "L2": [5, 2]}
+
 to_cubestring = {"w": "U", "g": "F", "y": "D", "b": "B", "r": "R", "o": "L"}
+
 from_cubestring = {"U": "w", "F": "g", "D": "y", "B": "b", "R": "r", "L": "o"}
+
+int_to_turn = {1: "U", 2: "F", 3: "R", 4: "D", 5: "B", 6: "L",
+               7: "U\'", 8: "F\'", 9: "R\'", 10: "D\'", 11: "B\'", 12: "L\'",
+               13: "U2", 14: "F2", 15: "R2", 16: "D2", 17: "B2", 18: "L2"}
 
 
 def swap4(a, b, c, d, way):
@@ -70,9 +80,6 @@ def scramble_generator(length):
     :param length: Length of the random scramble.
     :return: Random scramble.
     """
-    int_to_turn = {1: 'U', 2: 'F', 3: 'R', 4: 'D', 5: 'B', 6: 'L',
-                   7: 'U\'', 8: 'F\'', 9: 'R\'', 10: 'D\'', 11: 'B\'', 12: 'L\'',
-                   13: 'U2', 14: 'F2', 15: 'R2', 16: 'D2', 17: 'B2', 18: 'L2'}
     scramble = np.random.randint(6, size=length) + 1
     scramble = [k for k, g in groupby(scramble) if k != 0]
     for idx in range(len(scramble)):
@@ -81,7 +88,7 @@ def scramble_generator(length):
             scramble[idx] += 6
         elif odds < 200:
             scramble[idx] += 12
-    return ' '.join([int_to_turn[i] for i in scramble]) + '\n'
+    return " ".join([int_to_turn[i] for i in scramble]) + "\n"
 
 
 class Cube:
@@ -355,45 +362,45 @@ class Cube:
         k = 0
         for idx, i in enumerate(np.all(self.pieces == pieces_ref, axis=1)):
             if i:
-                if idx == 0 and self.matrix_colors[0, 1] == 'w':
+                if idx == 0 and self.matrix_colors[0, 1] == "w":
                     k += 1
-                elif idx == 1 and self.matrix_colors[0, 2] == 'w':
+                elif idx == 1 and self.matrix_colors[0, 2] == "w":
                     k += 1
-                elif idx == 2 and self.matrix_colors[0, 3] == 'w':
+                elif idx == 2 and self.matrix_colors[0, 3] == "w":
                     k += 1
-                elif idx == 3 and self.matrix_colors[0, 4] == 'w':
+                elif idx == 3 and self.matrix_colors[0, 4] == "w":
                     k += 1
-                elif idx == 4 and self.matrix_colors[1, 4] == 'g':
+                elif idx == 4 and self.matrix_colors[1, 4] == "g":
                     k += 1
-                elif idx == 5 and self.matrix_colors[1, 2] == 'g':
+                elif idx == 5 and self.matrix_colors[1, 2] == "g":
                     k += 1
-                elif idx == 6 and self.matrix_colors[2, 3] == 'r':
+                elif idx == 6 and self.matrix_colors[2, 3] == "r":
                     k += 1
-                elif idx == 7 and self.matrix_colors[5, 3] == 'o':
+                elif idx == 7 and self.matrix_colors[5, 3] == "o":
                     k += 1
-                elif idx == 8 and self.matrix_colors[1, 1] == 'g':
+                elif idx == 8 and self.matrix_colors[1, 1] == "g":
                     k += 1
-                elif idx == 9 and self.matrix_colors[2, 2] == 'r':
+                elif idx == 9 and self.matrix_colors[2, 2] == "r":
                     k += 1
-                elif idx == 10 and self.matrix_colors[4, 3] == 'b':
+                elif idx == 10 and self.matrix_colors[4, 3] == "b":
                     k += 1
-                elif idx == 11 and self.matrix_colors[5, 4] == 'o':
+                elif idx == 11 and self.matrix_colors[5, 4] == "o":
                     k += 1
-                elif idx == 12 and self.matrix_colors[0, 5] == 'w':
+                elif idx == 12 and self.matrix_colors[0, 5] == "w":
                     k += 1
-                elif idx == 13 and self.matrix_colors[0, 6] == 'w':
+                elif idx == 13 and self.matrix_colors[0, 6] == "w":
                     k += 1
-                elif idx == 14 and self.matrix_colors[0, 7] == 'w':
+                elif idx == 14 and self.matrix_colors[0, 7] == "w":
                     k += 1
-                elif idx == 15 and self.matrix_colors[0, 8] == 'w':
+                elif idx == 15 and self.matrix_colors[0, 8] == "w":
                     k += 1
-                elif idx == 16 and self.matrix_colors[3, 6] == 'y':
+                elif idx == 16 and self.matrix_colors[3, 6] == "y":
                     k += 1
-                elif idx == 17 and self.matrix_colors[3, 5] == 'y':
+                elif idx == 17 and self.matrix_colors[3, 5] == "y":
                     k += 1
-                elif idx == 18 and self.matrix_colors[3, 8] == 'y':
+                elif idx == 18 and self.matrix_colors[3, 8] == "y":
                     k += 1
-                elif idx == 19 and self.matrix_colors[3, 7] == 'y':
+                elif idx == 19 and self.matrix_colors[3, 7] == "y":
                     k += 1
         return k
 
@@ -552,50 +559,50 @@ class Cube:
             binary_array = np.zeros(288).astype(int)
             for i in range(6):
                 for j in range(1, 9):
-                    if self.matrix_colors[i][j] == 'w':
+                    if self.matrix_colors[i][j] == "w":
                         binary_array[(j - 1) * 6 + i * 48] = 1
-                    elif self.matrix_colors[i][j] == 'g':
+                    elif self.matrix_colors[i][j] == "g":
                         binary_array[(j - 1) * 6 + 1 + i * 48] = 1
-                    elif self.matrix_colors[i][j] == 'r':
+                    elif self.matrix_colors[i][j] == "r":
                         binary_array[(j - 1) * 6 + 2 + i * 48] = 1
-                    elif self.matrix_colors[i][j] == 'y':
+                    elif self.matrix_colors[i][j] == "y":
                         binary_array[(j - 1) * 6 + 3 + i * 48] = 1
-                    elif self.matrix_colors[i][j] == 'b':
+                    elif self.matrix_colors[i][j] == "b":
                         binary_array[(j - 1) * 6 + 4 + i * 48] = 1
-                    elif self.matrix_colors[i][j] == 'o':
+                    elif self.matrix_colors[i][j] == "o":
                         binary_array[(j - 1) * 6 + 5 + i * 48] = 1
         else:
             binary_array = np.zeros(144).astype(int)
             for i in range(6):
                 for j in range(1, 9):
-                    if self.matrix_colors[i][j] == 'g':
+                    if self.matrix_colors[i][j] == "g":
                         binary_array[(j - 1) * 3 + 1 + i * 24] = 1
-                    elif self.matrix_colors[i][j] == 'r':
+                    elif self.matrix_colors[i][j] == "r":
                         binary_array[(j - 1) * 3 + 1 + i * 24] = 1
                         binary_array[(j - 1) * 3 + 2 + i * 24] = 1
-                    elif self.matrix_colors[i][j] == 'y':
+                    elif self.matrix_colors[i][j] == "y":
                         binary_array[(j - 1) * 3 + i * 24] = 1
-                    elif self.matrix_colors[i][j] == 'b':
+                    elif self.matrix_colors[i][j] == "b":
                         binary_array[(j - 1) * 3 + i * 24] = 1
                         binary_array[(j - 1) * 3 + 2 + i * 24] = 1
-                    elif self.matrix_colors[i][j] == 'o':
+                    elif self.matrix_colors[i][j] == "o":
                         binary_array[(j - 1) * 3 + i * 24] = 1
                         binary_array[(j - 1) * 3 + 1 + i * 24] = 1
 
         return binary_array
 
     def save_cube(self, path):
-        file = open(path, 'wb')
+        file = open(path, "wb")
         bin_to_save = "".join(["{:0>5}".format(bin(pieces_to_num[tuple(piece)])[2:]) for piece in self.pieces]) + \
                       "".join(self.get_binary_array().astype(str))
         bin_to_save = bin_to_save
-        bin_to_save = int(bin_to_save[::-1], base=2).to_bytes(32, 'little')
+        bin_to_save = int(bin_to_save[::-1], base=2).to_bytes(32, "little")
         file.write(bin_to_save)
 
     def load_cube(self, path):
-        file = open(path, 'rb')
+        file = open(path, "rb")
         binary_array = file.read()
-        binary_array = np.array(list("{:0<244}".format(format(int.from_bytes(binary_array, 'little'), '032b')[::-1])))
+        binary_array = np.array(list("{:0<244}".format(format(int.from_bytes(binary_array, "little"), "032b")[::-1])))
         for idx, i in enumerate(np.arange(100, step=5)):
             self.pieces[idx] = num_to_pieces[int("".join(binary_array[i: i+5].tolist()), 2)]
         binary_array = binary_array[100:].reshape(-1, 3).astype(int)
