@@ -340,8 +340,7 @@ class Cube:
             return None
         if self.cube_loaded:
             print("You loaded a cube, if it had wrong pieces, you'll get wrong results")
-        else:
-            return sum(np.all(self.pieces == pieces_ref, axis=1))
+        return sum(np.all(self.pieces == pieces_ref, axis=1))
 
     def n_oriented_pieces_in_place(self):
         """
@@ -353,51 +352,50 @@ class Cube:
             return None
         if self.cube_loaded:
             print("You loaded a cube, if it had wrong pieces, you'll get wrong results")
-        else:
-            k = 0
-            for idx, i in enumerate(np.all(self.pieces == pieces_ref, axis=1)):
-                if i:
-                    if idx == 0 and self.matrix_colors[0, 1] == 'w':
-                        k += 1
-                    elif idx == 1 and self.matrix_colors[0, 2] == 'w':
-                        k += 1
-                    elif idx == 2 and self.matrix_colors[0, 3] == 'w':
-                        k += 1
-                    elif idx == 3 and self.matrix_colors[0, 4] == 'w':
-                        k += 1
-                    elif idx == 4 and self.matrix_colors[1, 4] == 'g':
-                        k += 1
-                    elif idx == 5 and self.matrix_colors[1, 2] == 'g':
-                        k += 1
-                    elif idx == 6 and self.matrix_colors[2, 3] == 'r':
-                        k += 1
-                    elif idx == 7 and self.matrix_colors[5, 3] == 'o':
-                        k += 1
-                    elif idx == 8 and self.matrix_colors[1, 1] == 'g':
-                        k += 1
-                    elif idx == 9 and self.matrix_colors[2, 2] == 'r':
-                        k += 1
-                    elif idx == 10 and self.matrix_colors[4, 3] == 'b':
-                        k += 1
-                    elif idx == 11 and self.matrix_colors[5, 4] == 'o':
-                        k += 1
-                    elif idx == 12 and self.matrix_colors[0, 5] == 'w':
-                        k += 1
-                    elif idx == 13 and self.matrix_colors[0, 6] == 'w':
-                        k += 1
-                    elif idx == 14 and self.matrix_colors[0, 7] == 'w':
-                        k += 1
-                    elif idx == 15 and self.matrix_colors[0, 8] == 'w':
-                        k += 1
-                    elif idx == 16 and self.matrix_colors[3, 6] == 'y':
-                        k += 1
-                    elif idx == 17 and self.matrix_colors[3, 5] == 'y':
-                        k += 1
-                    elif idx == 18 and self.matrix_colors[3, 8] == 'y':
-                        k += 1
-                    elif idx == 19 and self.matrix_colors[3, 7] == 'y':
-                        k += 1
-            return k
+        k = 0
+        for idx, i in enumerate(np.all(self.pieces == pieces_ref, axis=1)):
+            if i:
+                if idx == 0 and self.matrix_colors[0, 1] == 'w':
+                    k += 1
+                elif idx == 1 and self.matrix_colors[0, 2] == 'w':
+                    k += 1
+                elif idx == 2 and self.matrix_colors[0, 3] == 'w':
+                    k += 1
+                elif idx == 3 and self.matrix_colors[0, 4] == 'w':
+                    k += 1
+                elif idx == 4 and self.matrix_colors[1, 4] == 'g':
+                    k += 1
+                elif idx == 5 and self.matrix_colors[1, 2] == 'g':
+                    k += 1
+                elif idx == 6 and self.matrix_colors[2, 3] == 'r':
+                    k += 1
+                elif idx == 7 and self.matrix_colors[5, 3] == 'o':
+                    k += 1
+                elif idx == 8 and self.matrix_colors[1, 1] == 'g':
+                    k += 1
+                elif idx == 9 and self.matrix_colors[2, 2] == 'r':
+                    k += 1
+                elif idx == 10 and self.matrix_colors[4, 3] == 'b':
+                    k += 1
+                elif idx == 11 and self.matrix_colors[5, 4] == 'o':
+                    k += 1
+                elif idx == 12 and self.matrix_colors[0, 5] == 'w':
+                    k += 1
+                elif idx == 13 and self.matrix_colors[0, 6] == 'w':
+                    k += 1
+                elif idx == 14 and self.matrix_colors[0, 7] == 'w':
+                    k += 1
+                elif idx == 15 and self.matrix_colors[0, 8] == 'w':
+                    k += 1
+                elif idx == 16 and self.matrix_colors[3, 6] == 'y':
+                    k += 1
+                elif idx == 17 and self.matrix_colors[3, 5] == 'y':
+                    k += 1
+                elif idx == 18 and self.matrix_colors[3, 8] == 'y':
+                    k += 1
+                elif idx == 19 and self.matrix_colors[3, 7] == 'y':
+                    k += 1
+        return k
 
     def get_cubestring(self, spaces=True):
         space = " " if spaces else ""
