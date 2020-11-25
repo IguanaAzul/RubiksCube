@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='rubiks_cube',
-    version='1.0.3',
+    version='1.0.4',
     description='A Rubiks Cube Package for Python',
     url='https://github.com/IguanaAzul/RubiksCube.git',
     author='Ramon Griffo',
