@@ -2,13 +2,13 @@ import numpy as np
 from itertools import groupby
 
 
-matrix_ref_g = np.array([["g", "g", "g", "g", "g", "g", "g", "g", "g"], ["y", "y", "y", "y", "y", "y", "y", "y", "y"],
-                       ["r", "r", "r", "r", "r", "r", "r", "r", "r"], ["b", "b", "b", "b", "b", "b", "b", "b", "b"],
-                       ["w", "w", "w", "w", "w", "w", "w", "w", "w"], ["o", "o", "o", "o", "o", "o", "o", "o", "o"]])
-
 matrix_ref = np.array([["w", "w", "w", "w", "w", "w", "w", "w", "w"], ["g", "g", "g", "g", "g", "g", "g", "g", "g"],
                        ["r", "r", "r", "r", "r", "r", "r", "r", "r"], ["y", "y", "y", "y", "y", "y", "y", "y", "y"],
                        ["b", "b", "b", "b", "b", "b", "b", "b", "b"], ["o", "o", "o", "o", "o", "o", "o", "o", "o"]])
+
+matrix_ref_g = np.array([["g", "g", "g", "g", "g", "g", "g", "g", "g"], ["y", "y", "y", "y", "y", "y", "y", "y", "y"],
+                         ["r", "r", "r", "r", "r", "r", "r", "r", "r"], ["b", "b", "b", "b", "b", "b", "b", "b", "b"],
+                         ["w", "w", "w", "w", "w", "w", "w", "w", "w"], ["o", "o", "o", "o", "o", "o", "o", "o", "o"]])
 
 pieces_ref = np.array([[1, "w", "g", None], [1, "w", "r", None], [1, "w", "b", None], [1, "w", "o", None],
                        [1, "g", "o", None], [1, "g", "r", None], [1, "r", "b", None], [1, "b", "o", None],
@@ -17,10 +17,10 @@ pieces_ref = np.array([[1, "w", "g", None], [1, "w", "r", None], [1, "w", "b", N
                        [2, "y", "g", "o"], [2, "y", "g", "r"], [2, "y", "b", "r"], [2, "y", "b", "o"]])
 
 pieces_ref_g = np.array([[1, "g", "y", None], [1, "g", "r", None], [1, "g", "w", None], [1, "g", "o", None],
-                       [1, "y", "o", None], [1, "y", "r", None], [1, "r", "w", None], [1, "w", "o", None],
-                       [1, "b", "y", None], [1, "b", "r", None], [1, "b", "w", None], [1, "b", "o", None],
-                       [2, "g", "y", "o"], [2, "g", "y", "r"], [2, "g", "w", "r"], [2, "g", "w", "o"],
-                       [2, "b", "y", "o"], [2, "b", "y", "r"], [2, "b", "w", "r"], [2, "b", "w", "o"]])
+                         [1, "y", "o", None], [1, "y", "r", None], [1, "r", "w", None], [1, "w", "o", None],
+                         [1, "b", "y", None], [1, "b", "r", None], [1, "b", "w", None], [1, "b", "o", None],
+                         [2, "g", "y", "o"], [2, "g", "y", "r"], [2, "g", "w", "r"], [2, "g", "w", "o"],
+                         [2, "b", "y", "o"], [2, "b", "y", "r"], [2, "b", "w", "r"], [2, "b", "w", "o"]])
 
 bin_to_color = {(0, 0, 0): "w", (0, 1, 0): "g", (0, 1, 1): "r", (1, 0, 0): "y", (1, 0, 1): "b", (1, 1, 0): "o"}
 
@@ -545,6 +545,22 @@ class Cube:
         print("      {0} {1} {2}".format(self.matrix_colors[1, 4], self.matrix_colors[1, 0], self.matrix_colors[1, 2]))
         print("      {0} {1} {2}".format(self.matrix_colors[1, 5], self.matrix_colors[1, 1], self.matrix_colors[1, 6]))
         print()
+
+    def change(self, to="g"):
+        if to == "g" and self.get_matrix()[0, 0] == "w":
+            change = {"w": "g", "g": "y", "y": "b", "b": "w", "r": "r", "o": "o", None: None, 1: 1, 2: 2}
+        elif to == "w" and self.get_matrix()[0, 0] == "g":
+            change = {"g": "w", "y": "g", "b": "y", "w": "b", "r": "r", "o": "o", None: None, 1: 1, 2: 2}
+        else:
+            print("white is not the 0 color")
+            return
+
+        self.matrix_colors = np.array([change[color] for color in self.get_matrix().copy().reshape(-1)]).\
+            reshape((6, 9))
+        self.matrix_colors_ref = np.array([change[color] for color in self.matrix_colors_ref.copy()
+                                          .reshape(-1)]).reshape((6, 9))
+        self.pieces = np.array([change[color] for color in self.pieces.copy().reshape(-1)]).reshape((-1, 4))
+        self.pieces_ref = np.array([change[color] for color in self.pieces_ref.copy().reshape(-1)]).reshape((-1, 4))
 
     def scramble(self, scramble):
         """

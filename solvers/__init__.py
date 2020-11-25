@@ -1,1 +1,1 @@
-from .cfop import cross
+from .use_external_kociemba import external_kociemba
