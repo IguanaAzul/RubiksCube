@@ -581,30 +581,21 @@ class Cube:
 
         return binary_array
 
-    def save_cube(self, path, discard_pieces=False):
+    def save_cube(self, path):
         file = open(path, 'wb')
-        if discard_pieces:
-            self.matrix_set = True
-            prefix = "1"
-            bin_to_save = "".join(self.get_binary_array().astype(str))
-        else:
-            prefix = "0"
-            bin_to_save = "".join(["{:0>5}".format(bin(pieces_to_num[tuple(piece)])[2:]) for piece in self.pieces]) + \
-                          "".join(self.get_binary_array().astype(str))
-        bin_to_save = prefix + bin_to_save
+        bin_to_save = "".join(["{:0>5}".format(bin(pieces_to_num[tuple(piece)])[2:]) for piece in self.pieces]) + \
+                      "".join(self.get_binary_array().astype(str))
+        bin_to_save = bin_to_save
         bin_to_save = int(bin_to_save[::-1], base=2).to_bytes(32, 'little')
         file.write(bin_to_save)
 
     def load_cube(self, path):
         file = open(path, 'rb')
         binary_array = file.read()
-        binary_array = np.array(list("{:0<245}".format(format(int.from_bytes(binary_array, 'little'), '032b')[::-1])))
-        if not int(binary_array[0]):
-            for idx, i in enumerate(np.arange(1, 101, step=5)):
-                self.pieces[idx] = num_to_pieces[int("".join(binary_array[i: i+5].tolist()), 2)]
-            binary_array = binary_array[101:].reshape(-1, 3).astype(int)
-        else:
-            binary_array = binary_array[1:].reshape(-1, 3).astype(int)
+        binary_array = np.array(list("{:0<244}".format(format(int.from_bytes(binary_array, 'little'), '032b')[::-1])))
+        for idx, i in enumerate(np.arange(100, step=5)):
+            self.pieces[idx] = num_to_pieces[int("".join(binary_array[i: i+5].tolist()), 2)]
+        binary_array = binary_array[100:].reshape(-1, 3).astype(int)
         for i in range(6):
             for j in range(1, 9):
                 self.matrix_colors[i][j] = bin_to_color[tuple(binary_array[i*8+(j-1)])]
