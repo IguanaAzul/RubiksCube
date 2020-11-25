@@ -373,6 +373,45 @@ class Cube:
                     k += 1
         return k
 
+    def to_cubestring(self):
+        to_cubestring = {"w": "U", "g": "F", "y": "D", "b": "B", "r": "R", "o": "L"}
+        cube_matrix = self.get_matrix()[:, 1:]
+        list_positions = list()
+        for face in cube_matrix:
+            for color in face:
+                list_positions.append(to_cubestring[color])
+        list_positions = np.array(list_positions).reshape((6, 8))
+
+        cubestring = ""
+
+        cubestring += list_positions[0, 0] + list_positions[1, 2] + " "
+        cubestring += list_positions[0, 1] + list_positions[2, 3] + " "
+        cubestring += list_positions[0, 2] + list_positions[4, 0] + " "
+        cubestring += list_positions[0, 3] + list_positions[5, 1] + " "
+
+        cubestring += list_positions[3, 0] + list_positions[1, 0] + " "
+        cubestring += list_positions[3, 3] + list_positions[2, 1] + " "
+        cubestring += list_positions[3, 2] + list_positions[4, 2] + " "
+        cubestring += list_positions[3, 1] + list_positions[5, 3] + " "
+
+        cubestring += list_positions[1, 1] + list_positions[2, 0] + " "
+        cubestring += list_positions[1, 3] + list_positions[5, 0] + " "
+
+        cubestring += list_positions[4, 1] + list_positions[2, 2] + " "
+        cubestring += list_positions[4, 3] + list_positions[5, 2] + " "
+
+        cubestring += list_positions[0, 5] + list_positions[1, 6] + list_positions[2, 4] + " "
+        cubestring += list_positions[0, 6] + list_positions[2, 7] + list_positions[4, 5] + " "
+        cubestring += list_positions[0, 7] + list_positions[4, 4] + list_positions[5, 6] + " "
+        cubestring += list_positions[0, 4] + list_positions[5, 5] + list_positions[1, 7] + " "
+
+        cubestring += list_positions[3, 4] + list_positions[2, 5] + list_positions[1, 5] + " "
+        cubestring += list_positions[3, 5] + list_positions[1, 4] + list_positions[5, 4] + " "
+        cubestring += list_positions[3, 6] + list_positions[5, 7] + list_positions[4, 7] + " "
+        cubestring += list_positions[3, 7] + list_positions[4, 6] + list_positions[2, 6]
+
+        print(cubestring)
+
     def print_cube(self):
         """
         Prints the state of the rubiks cube.
