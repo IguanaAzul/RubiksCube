@@ -6,21 +6,11 @@ matrix_ref = np.array([["w", "w", "w", "w", "w", "w", "w", "w", "w"], ["g", "g",
                        ["r", "r", "r", "r", "r", "r", "r", "r", "r"], ["y", "y", "y", "y", "y", "y", "y", "y", "y"],
                        ["b", "b", "b", "b", "b", "b", "b", "b", "b"], ["o", "o", "o", "o", "o", "o", "o", "o", "o"]])
 
-matrix_ref_g = np.array([["g", "g", "g", "g", "g", "g", "g", "g", "g"], ["y", "y", "y", "y", "y", "y", "y", "y", "y"],
-                         ["r", "r", "r", "r", "r", "r", "r", "r", "r"], ["b", "b", "b", "b", "b", "b", "b", "b", "b"],
-                         ["w", "w", "w", "w", "w", "w", "w", "w", "w"], ["o", "o", "o", "o", "o", "o", "o", "o", "o"]])
-
 pieces_ref = np.array([[1, "w", "g", None], [1, "w", "r", None], [1, "w", "b", None], [1, "w", "o", None],
                        [1, "g", "o", None], [1, "g", "r", None], [1, "r", "b", None], [1, "b", "o", None],
                        [1, "y", "g", None], [1, "y", "r", None], [1, "y", "b", None], [1, "y", "o", None],
                        [2, "w", "g", "o"], [2, "w", "g", "r"], [2, "w", "b", "r"], [2, "w", "b", "o"],
                        [2, "y", "g", "o"], [2, "y", "g", "r"], [2, "y", "b", "r"], [2, "y", "b", "o"]])
-
-pieces_ref_g = np.array([[1, "g", "y", None], [1, "g", "r", None], [1, "g", "w", None], [1, "g", "o", None],
-                         [1, "y", "o", None], [1, "y", "r", None], [1, "r", "w", None], [1, "w", "o", None],
-                         [1, "b", "y", None], [1, "b", "r", None], [1, "b", "w", None], [1, "b", "o", None],
-                         [2, "g", "y", "o"], [2, "g", "y", "r"], [2, "g", "w", "r"], [2, "g", "w", "o"],
-                         [2, "b", "y", "o"], [2, "b", "y", "r"], [2, "b", "w", "r"], [2, "b", "w", "o"]])
 
 bin_to_color = {(0, 0, 0): "w", (0, 1, 0): "g", (0, 1, 1): "r", (1, 0, 0): "y", (1, 0, 1): "b", (1, 1, 0): "o"}
 
@@ -88,22 +78,16 @@ class Cube:
     Implements a 3x3x3 Rubiks Cube.
     """
     def __init__(self, color_0="white"):
-        if color_0 == "white" or color_0 == "w":
-            self.matrix_colors = matrix_ref.copy()
-            self.matrix_colors_ref = matrix_ref.copy()
-            self.pieces = pieces_ref.copy()
-            self.pieces_ref = pieces_ref.copy()
-        elif color_0 == "green" or color_0 == "g":
-            self.matrix_colors = matrix_ref_g.copy()
-            self.matrix_colors_ref = matrix_ref_g.copy()
-            self.pieces = pieces_ref_g.copy()
-            self.pieces_ref = pieces_ref_g.copy()
+        self.matrix_colors = matrix_ref.copy()
+        self.matrix_colors_ref = matrix_ref.copy()
+        self.pieces = pieces_ref.copy()
+        self.pieces_ref = pieces_ref.copy()
+        if color_0 == "green" or color_0 == "g":
+            self.change(to="g")
+        elif color_0 == "white" or color_0 == "w":
+            pass
         else:
             print("Only green and white available for position 0, using white")
-            self.matrix_colors = matrix_ref.copy()
-            self.matrix_colors_ref = matrix_ref.copy()
-            self.pieces = pieces_ref.copy()
-            self.pieces_ref = pieces_ref.copy()
         self.matrix_set = False
         self.cube_loaded = False
 
@@ -349,10 +333,10 @@ class Cube:
         :return: Number of pieces in the correct place.
         """
         if self.matrix_set:
-            print("You set the color_matrix yourself, so pieces positions aren't tracked")
+            print("Warning: You set the color_matrix yourself, so pieces positions aren't tracked")
             return None
         if self.cube_loaded:
-            print("You loaded a cube, if it had wrong pieces, you'll get wrong results")
+            print("Warning: You loaded a cube, if it had wrong pieces, you'll get wrong results")
         return sum(np.all(self.pieces == self.pieces_ref, axis=1))
 
     def n_oriented_pieces_in_place(self):
@@ -361,10 +345,10 @@ class Cube:
         :return: Number of pieces in the correct place and also oriented correctly.
         """
         if self.matrix_set:
-            print("You set the color_matrix yourself, so pieces positions aren't tracked")
+            print("Warning: You set the color_matrix yourself, so pieces positions aren't tracked")
             return None
         if self.cube_loaded:
-            print("You loaded a cube, if it had wrong pieces, you'll get wrong results")
+            print("Warning: You loaded a cube, if it had wrong pieces, you'll get wrong results")
         k = 0
         if self.matrix_colors[0, 0] == "w":
             checker = ["w", "w", "w", "w", "g", "g", "r", "o", "g", "r",
@@ -458,8 +442,8 @@ class Cube:
                     cubestring += cube_matrix[face, position]
 
         else:
-            print("format uknown.")
-            return None
+            print("Error: format uknown.")
+            return
         return cubestring
 
     def set_matrix_from_cubestring(self, cubestring):
@@ -552,7 +536,7 @@ class Cube:
         elif to == "w" and self.get_matrix()[0, 0] == "g":
             change = {"g": "w", "y": "g", "b": "y", "w": "b", "r": "r", "o": "o", None: None, 1: 1, 2: 2}
         else:
-            print("white is not the 0 color")
+            print("Error: invalid change.")
             return
 
         self.matrix_colors = np.array([change[color] for color in self.get_matrix().copy().reshape(-1)]).\

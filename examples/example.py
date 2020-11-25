@@ -31,11 +31,9 @@ cube.print()
 
 # Saving the cube:
 cube.save_cube("cube1.rbc")
-print(cube.pieces)
 cube = rubiks_cube.Cube()
 # Loading the cube:
 cube.load_cube("cube1.rbc")
-print(cube.pieces)
 cube.print()
 
 # Example of scramble generation
