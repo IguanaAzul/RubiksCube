@@ -70,24 +70,18 @@ def scramble_generator(length):
             scramble[idx] += 6
         elif odds < 200:
             scramble[idx] += 12
-    return " ".join([int_to_turn[i] for i in scramble]) + "\n"
+    return " ".join([int_to_turn[i] for i in scramble])
 
 
 class Cube:
     """
     Implements a 3x3x3 Rubiks Cube.
     """
-    def __init__(self, color_0="white"):
+    def __init__(self):
         self.matrix_colors = matrix_ref.copy()
         self.matrix_colors_ref = matrix_ref.copy()
         self.pieces = pieces_ref.copy()
         self.pieces_ref = pieces_ref.copy()
-        if color_0 == "green" or color_0 == "g":
-            self.change(to="g")
-        elif color_0 == "white" or color_0 == "w":
-            pass
-        else:
-            print("Only green and white available for position 0, using white")
         self.matrix_set = False
         self.cube_loaded = False
 
