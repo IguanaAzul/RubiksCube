@@ -1,4 +1,5 @@
 from rubiks_cube import rubiks_cube
+from utils import scramble_generator
 
 # Create new cube object
 cube = rubiks_cube.Cube()
@@ -37,7 +38,7 @@ cube.load_cube("cube1.rbc")
 cube.print()
 
 # Example of scramble generation
-scramble = rubiks_cube.scramble_generator(18)
+scramble = scramble_generator(18)
 print(scramble)
 
 # Count number of colors in the correct place
@@ -46,5 +47,3 @@ print(cube.n_colors_in_place())
 # Count number of pieces in the correct place
 print(cube.n_pieces_in_place())
 
-# Count number of pieces in the correct place and also oriented
-print(cube.n_oriented_pieces_in_place())

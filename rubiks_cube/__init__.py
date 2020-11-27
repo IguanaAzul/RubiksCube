@@ -1,1 +1,3 @@
-from .rubiks_cube import Cube, scramble_generator
+from .rubiks_cube import Cube
+from .face_cube import FaceCube
+from .cubie_cube import CubieCube

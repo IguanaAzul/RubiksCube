@@ -1,6 +1,6 @@
 import numpy as np
-from rubiks_cube import scramble_generator, rubiks_cube
-import itertools
+from rubiks_cube import rubiks_cube
+from utils import scramble_generator
 
 max_oriented = 18
 max_depth = 10

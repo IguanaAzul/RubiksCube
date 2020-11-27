@@ -39,3 +39,6 @@ rubiks_cube.egg-info
 # Pycharm files
 __pycache__
 .idea
+
+# Jupyter files
+*.ipynb
