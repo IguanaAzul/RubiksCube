@@ -1,7 +1,9 @@
 import numpy as np
 from rubiks_cube import scramble_generator, rubiks_cube
-from copy import deepcopy
 import itertools
+
+max_oriented = 18
+max_depth = 10
 
 
 def is_g1(cube):
@@ -24,45 +26,65 @@ def count_oriented(cube):
         np.array([i in ["w", "y"] for i in matrix[3]]).sum()
 
 
-def phase1(cube):
-    allowed_moves = ["U", "R", "F", "L", "B", "D",
-                      "U'", "R'", "F'", "L'", "B'", "D'",
-                      "U2", "R2", "F2", "L2", "B2", "D2"]
-    color_matrix = cube.get_matrix().copy()
-    best = cube
-    best_value = count_oriented(cube)
-    solution = ""
-    best_move = ""
-    best_changed = False
-    depth = 1
-    possible_moves = allowed_moves.copy()
-    while not is_g1(cube):
-        for move in possible_moves:
-            evaluated = rubiks_cube.Cube()
-            evaluated.set_matrix(color_matrix.copy())
-            move = " ".join([move for move in move]) if type(move) is tuple else move
-            evaluated.scramble(move)
-            evaluation = count_oriented(evaluated)
-            if evaluation > best_value:
-                best_value = evaluation
-                best = evaluated
-                best_move = move
-                best_changed = True
-        if not best_changed:
-            depth += 1
-            possible_moves = itertools.combinations(allowed_moves, depth)
-        else:
-            depth = 1
-            possible_moves = allowed_moves.copy()
-        best_changed = False
-        color_matrix = best.get_matrix()
-        cube = rubiks_cube.Cube()
-        cube.set_matrix(color_matrix)
-        solution += best_move + " "
-    return solution
+allowed_moves = ["U", "R", "F", "L", "B", "D",
+                 "U'", "R'", "F'", "L'", "B'", "D'",
+                 "U2", "R2", "F2", "L2", "B2", "D2"]
 
 
-def phase2():
-    phase2 = ""
+def is_equiv(move1, move2):
+    if move1 == "":
+        return False
+    elif move1[0] == move2[0]:
+        return True
+    else:
+        return False
 
-    return phase2
+
+def calc_cost(cost, cube):
+    return cost + (max_oriented - count_oriented(cube))
+
+
+def successors(node, cost):
+    cubes = list()
+    for move in allowed_moves:
+        openning_node_cube = rubiks_cube.Cube()
+        openning_node_cube.set_matrix(node[1].get_matrix().copy())
+        openning_node_cube.set_pieces(node[1].get_pieces().copy())
+        openning_node_cube.scramble(move)
+        f_openning_node = calc_cost(cost, openning_node_cube)
+        cubes.append((move, openning_node_cube, f_openning_node))
+    return sorted(cubes, key=lambda tup: tup[2])
+
+
+def ida_star(cube):
+    cube_node = rubiks_cube.Cube()
+    cube_node.set_matrix(cube.get_matrix().copy())
+    cube_node.set_pieces(cube.get_pieces().copy())
+    path = [("", cube_node)]
+    bound = calc_cost(0, path[-1][1])
+    while True:
+        t = search(path, 0, bound)
+        if t == "Found":
+            break
+        bound = t
+    return " ".join([i[0] for i in path[1:]])
+
+
+def search(path, g, bound):
+    node = path[-1]
+    least = max_oriented
+    f = g + calc_cost(g, node[1])
+    if f > bound:
+        return f
+    if is_g1(node[1]):
+        return "Found"
+    for suc in successors(node, f):
+        if not is_equiv(node[0], suc[0]):
+            path.append(suc)
+            t = search(path, g + 1, bound)
+            if t == "Found":
+                return t
+            least = t if t < least else least
+            path.pop()
+            # print(" ".join([i[0] for i in path[1:]]))
+    return least

@@ -587,6 +587,22 @@ class Cube:
         self.matrix_colors = matrix
         self.matrix_set = True
 
+    def get_pieces(self):
+        """
+        Returns pieces.
+        :return: Pieces
+        """
+        return self.pieces
+
+    def set_pieces(self, pieces):
+        """
+        Sets pieces (Doesn't check if the pieces are a valid cube,
+        if it isn`t you might run into problems if you want it to be solvable."
+        :param pieces: Pieces in the standard format
+        :return: None
+        """
+        self.pieces = pieces
+
     def get_binary_array(self, one_hot=False):
         """
         Returns the color matrix as a binary array for whatever purpose you`d like.
