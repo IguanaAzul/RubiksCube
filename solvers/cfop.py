@@ -21,6 +21,47 @@ def assert_cross_solved(cube):
         return False
 
 
+def assert_fisrt_pair(cube):
+    pieces = cube.get_pieces()
+    if (assert_cross_solved(cube) and
+            edges[int(np.where(pieces[:, 0] == FL)[0])] == FL and
+            corners[int(np.where(pieces[:, 0] == DFL)[0]) - 12] == DFL):
+        return True
+    else:
+        return False
+
+
+def assert_second_pair(cube):
+    pieces = cube.get_pieces()
+    if (assert_cross_solved(cube) and assert_fisrt_pair(cube) and
+            edges[int(np.where(pieces[:, 0] == FR)[0])] == FR and
+            corners[int(np.where(pieces[:, 0] == DFR)[0]) - 12] == DFR):
+        return True
+    else:
+        return False
+
+
+def assert_third_pair(cube):
+    pieces = cube.get_pieces()
+    if (assert_cross_solved(cube) and assert_fisrt_pair(cube) and assert_second_pair(cube) and
+            edges[int(np.where(pieces[:, 0] == RB)[0])] == RB and
+            corners[int(np.where(pieces[:, 0] == DBR)[0]) - 12] == DBR):
+        return True
+    else:
+        return False
+
+
+def assert_fourth_pair(cube):
+    pieces = cube.get_pieces()
+    if (assert_cross_solved(cube) and assert_fisrt_pair(cube) and
+            assert_second_pair(cube) and assert_third_pair(cube) and
+            edges[int(np.where(pieces[:, 0] == BL)[0])] == BL and
+            corners[int(np.where(pieces[:, 0] == DBL)[0]) - 12] == DBL):
+        return True
+    else:
+        return False
+
+
 def cross(cube):
     new_cube = rubiks_cube.Cube()
     new_cube.set_cube((cube.get_matrix().copy(), cube.get_pieces().copy()))
@@ -181,6 +222,7 @@ def cross(cube):
     # find piece DL
     DL_position = edges[int(np.where(new_cube.get_pieces()[:, 0] == DL)[0])]
     DL_orientation = int(new_cube.get_pieces()[np.where(new_cube.get_pieces()[:, 0] == DL)][0, 1])
+    case = ""
     if DL_position == UF and DL_orientation == 0:
         move = "U L2"
     elif DL_position == UR and DL_orientation == 0:
@@ -221,12 +263,258 @@ def cross(cube):
     cross_solution.append(move)
     new_cube.scramble(move)
 
-    return " . ".join(cross_solution), new_cube
+    return " ".join(cross_solution), new_cube
 
-def f2l(cube):
+
+def first_pair(cube):
     new_cube = rubiks_cube.Cube()
     new_cube.set_cube((cube.get_matrix().copy(), cube.get_pieces().copy()))
-    cross_solution = list()
-    # find piece UFL
-    UFL_position = corners[int(np.where(new_cube.get_pieces()[:, 0] == UFL)[0])]
-    UFL_orientation = int(new_cube.get_pieces()[np.where(new_cube.get_pieces()[:, 0] == UFL)][0, 1])
+
+    # find corner DFL
+    DFL_position = corners[int(np.where(new_cube.get_pieces()[:, 0] == DFL)[0]) - len(edges)]
+
+    # Move to position corner DFL above its spot (UFL)
+    if DFL_position == UFR:
+        pre_move_corner = "U"
+    elif DFL_position == UBR:
+        pre_move_corner = "U2"
+    elif DFL_position == UBL:
+        pre_move_corner = "U'"
+    elif DFL_position == DFL:
+        pre_move_corner = "L' U' L U"
+    elif DFL_position == DFR:
+        pre_move_corner = "R U R'"
+    elif DFL_position == DBR:
+        pre_move_corner = "R' U2 R"
+    elif DFL_position == DBL:
+        pre_move_corner = "B' U' B"
+    else:
+        pre_move_corner = ""
+
+    new_cube.scramble(pre_move_corner)
+
+    # find edge FL, move to be opposite to the corner (UR)
+    FL_position = edges[int(np.where(new_cube.get_pieces()[:, 0] == FL)[0])]
+    if FL_position == UF:
+        pre_move_edge = "L U' L'"
+    elif FL_position == UB:
+        pre_move_edge = "L U L'"
+    elif FL_position == UL:
+        pre_move_edge = "F' U2 F"
+    elif FL_position == FL:
+        pre_move_edge = "U L' U' L U'"
+    elif FL_position == FR:
+        pre_move_edge = "F' U' F"
+    elif FL_position == RB:
+        pre_move_edge = "R' U R U'"
+    elif FL_position == BL:
+        pre_move_edge = "L U2 L'"
+    else:
+        pre_move_edge = ""
+
+    new_cube.scramble(pre_move_edge)
+    FL_orientation = int(new_cube.get_pieces()[np.where(new_cube.get_pieces()[:, 0] == FL)][0, 1])
+    DFL_orientation = int(new_cube.get_pieces()[np.where(new_cube.get_pieces()[:, 0] == DFL)][0, 1])
+    case = ""
+    if DFL_orientation == 0 and FL_orientation == 0:
+        case = "L' B' U2 B L"
+    elif DFL_orientation == 1 and FL_orientation == 0:
+        case = "F' U2 F L F' L' F"
+    elif DFL_orientation == 2 and FL_orientation == 0:
+        case = "L U' L2 U' L"
+    elif DFL_orientation == 0 and FL_orientation == 1:
+        case = "U F U2 F' U F U' F'"
+    elif DFL_orientation == 1 and FL_orientation == 1:
+        case = "F U F'"
+    elif DFL_orientation == 2 and FL_orientation == 1:
+        case = "L U L' F' L F L'"
+    new_cube.scramble(case)
+
+    return " ".join((pre_move_corner, pre_move_edge, case)), new_cube
+
+
+def second_pair(cube):
+    new_cube = rubiks_cube.Cube()
+    new_cube.set_cube((cube.get_matrix().copy(), cube.get_pieces().copy()))
+
+    # find corner DFR
+    DFR_position = corners[int(np.where(new_cube.get_pieces()[:, 0] == DFR)[0]) - len(edges)]
+
+    # Move to position corner DFR above its spot (UFR)
+    if DFR_position == UFL:
+        pre_move_corner = "U'"
+    elif DFR_position == UBR:
+        pre_move_corner = "U"
+    elif DFR_position == UBL:
+        pre_move_corner = "U2"
+    elif DFR_position == DFR:
+        pre_move_corner = "R U R' U'"
+    elif DFR_position == DBR:
+        pre_move_corner = "B U B'"
+    elif DFR_position == DBL:
+        pre_move_corner = "L U2 L'"
+    else:
+        pre_move_corner = ""
+
+    new_cube.scramble(pre_move_corner)
+
+    # find edge FR, move to be opposite to the corner (UB)
+    FR_position = edges[int(np.where(new_cube.get_pieces()[:, 0] == FR)[0])]
+    if FR_position == UF:
+        pre_move_edge = "R' U2 R"
+    elif FR_position == UR:
+        pre_move_edge = "R U2 R' U'"
+    elif FR_position == UL:
+        pre_move_edge = "R' U R"
+    elif FR_position == FR:
+        pre_move_edge = "U F' U' F U'"
+    elif FR_position == RB:
+        pre_move_edge = "R' U' R"
+    elif FR_position == BL:
+        pre_move_edge = "U' L U L'"
+    else:
+        pre_move_edge = ""
+
+    new_cube.scramble(pre_move_edge)
+    FR_orientation = int(new_cube.get_pieces()[np.where(new_cube.get_pieces()[:, 0] == FR)][0, 1])
+    DFR_orientation = int(new_cube.get_pieces()[np.where(new_cube.get_pieces()[:, 0] == DFR)][0, 1])
+    case = ""
+    if DFR_orientation == 0 and FR_orientation == 0:
+        case = "U R U2 R' U R U' R'"
+    elif DFR_orientation == 1 and FR_orientation == 0:
+        case = "U' R U R' U2 R U' R'"
+    elif DFR_orientation == 2 and FR_orientation == 0:
+        case = "R U R'"
+    elif DFR_orientation == 0 and FR_orientation == 1:
+        case = "F' L' U2 L F"
+    elif DFR_orientation == 1 and FR_orientation == 1:
+        case = "R' U' R F' U' F"
+    elif DFR_orientation == 2 and FR_orientation == 1:
+        case = "R' U2 R F R' F' R"
+
+    new_cube.scramble(case)
+
+    return " ".join((pre_move_corner, pre_move_edge, case)), new_cube
+
+
+def third_pair(cube):
+    new_cube = rubiks_cube.Cube()
+    new_cube.set_cube((cube.get_matrix().copy(), cube.get_pieces().copy()))
+
+    # find corner DBR
+    DBR_position = corners[int(np.where(new_cube.get_pieces()[:, 0] == DBR)[0]) - len(edges)]
+
+    # Move to position corner DBR above its spot (UBR)
+    if DBR_position == UFL:
+        pre_move_corner = "U2"
+    elif DBR_position == UFR:
+        pre_move_corner = "U'"
+    elif DBR_position == UBL:
+        pre_move_corner = "U"
+    elif DBR_position == DBR:
+        pre_move_corner = "R' U R"
+    elif DBR_position == DBL:
+        pre_move_corner = "L U L'"
+    else:
+        pre_move_corner = ""
+
+    new_cube.scramble(pre_move_corner)
+
+    # find edge BR, move to be opposite to the corner (UL)
+    BR_position = edges[int(np.where(new_cube.get_pieces()[:, 0] == RB)[0])]
+    if BR_position == UF:
+        pre_move_edge = "B' U B"
+    elif BR_position == UR:
+        pre_move_edge = "B' U2 B"
+    elif BR_position == UB:
+        pre_move_edge = "U' B U' B' U"
+    elif BR_position == RB:
+        pre_move_edge = "U R' U' R U'"
+    elif BR_position == BL:
+        pre_move_edge = "B' U' B"
+    else:
+        pre_move_edge = ""
+
+    new_cube.scramble(pre_move_edge)
+    BR_orientation = int(new_cube.get_pieces()[np.where(new_cube.get_pieces()[:, 0] == RB)][0, 1])
+    DBR_orientation = int(new_cube.get_pieces()[np.where(new_cube.get_pieces()[:, 0] == DBR)][0, 1])
+    if DBR_orientation == 0 and BR_orientation == 0:
+        case = "R' F' U2 F R"
+    elif DBR_orientation == 1 and BR_orientation == 0:
+        case = "B' U2 B U' R' U R"
+    elif DBR_orientation == 2 and BR_orientation == 0:
+        case = "B' U' B R' U' R"
+    elif DBR_orientation == 0 and BR_orientation == 1:
+        case = "U B U2 B' U B U' B'"
+    elif DBR_orientation == 1 and BR_orientation == 1:
+        case = "B U B'"
+    elif DBR_orientation == 2 and BR_orientation == 1:
+        case = "U' B U B' U B' R B R'"
+
+    new_cube.scramble(case)
+
+    return " ".join((pre_move_corner, pre_move_edge, case)), new_cube
+
+
+def fourth_pair(cube):
+    new_cube = rubiks_cube.Cube()
+    new_cube.set_cube((cube.get_matrix().copy(), cube.get_pieces().copy()))
+
+    # find corner DBL
+    DBL_position = corners[int(np.where(new_cube.get_pieces()[:, 0] == DBL)[0]) - len(edges)]
+
+    # Move to position corner DBL above its spot (UBL)
+    if DBL_position == UFL:
+        pre_move_corner = "U"
+    elif DBL_position == UFR:
+        pre_move_corner = "U2"
+    elif DBL_position == UBR:
+        pre_move_corner = "U'"
+    elif DBL_position == DBL:
+        pre_move_corner = "L U' L'"
+    else:
+        pre_move_corner = ""
+
+    new_cube.scramble(pre_move_corner)
+
+    # find edge BL, move to be opposite to the corner (UF)
+    BL_position = edges[int(np.where(new_cube.get_pieces()[:, 0] == BL)[0])]
+    if BL_position == UL:
+        pre_move_edge = "L U2 L' U'"
+    elif BL_position == UR:
+        pre_move_edge = "U B' U B U'"
+    elif BL_position == UB:
+        pre_move_edge = "U B' U2 B U'"
+    elif BL_position == BL:
+        pre_move_edge = "U B' U' B U'"
+    else:
+        pre_move_edge = ""
+
+    new_cube.scramble(pre_move_edge)
+    BL_orientation = int(new_cube.get_pieces()[np.where(new_cube.get_pieces()[:, 0] == RB)][0, 1])
+    DBL_orientation = int(new_cube.get_pieces()[np.where(new_cube.get_pieces()[:, 0] == DBL)][0, 1])
+    case = ""
+    if DBL_orientation == 0 and BL_orientation == 0:
+        case = "U L U2 L' U L U' L'"
+    elif DBL_orientation == 1 and BL_orientation == 0:
+        case = "U' L U L' U2 L U' L'"
+    elif DBL_orientation == 2 and BL_orientation == 0:
+        case = "L U L'"
+    elif DBL_orientation == 0 and BL_orientation == 1:
+        case = "B' R' U2 R B"
+    elif DBL_orientation == 1 and BL_orientation == 1:
+        case = "U' L U' L' U B' U' B"
+    elif DBL_orientation == 2 and BL_orientation == 1:
+        case = "U B' U2 B U2 B' U B"
+
+    new_cube.scramble(case)
+
+    return " ".join((pre_move_corner, pre_move_edge, case)), new_cube
+
+
+def f2l(cube):
+    first_pair_moves, new_cube = first_pair(cube)
+    second_pair_moves, new_cube = second_pair(new_cube)
+    third_pair_moves, new_cube = third_pair(new_cube)
+    fourth_pair_moves, new_cube = fourth_pair(new_cube)
+    return " ".join((first_pair_moves, second_pair_moves, third_pair_moves, fourth_pair_moves)), new_cube

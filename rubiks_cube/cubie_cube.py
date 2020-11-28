@@ -73,7 +73,7 @@ class CubieCube:
         # BACK
         elif turn == 4:
             edges_to_swap = [2, 6, 10, 7]
-            corners_to_swap = [14, 15, 18, 19]
+            corners_to_swap = [15, 14, 18, 19]
         # LEFT
         elif turn == 5:
             edges_to_swap = [3, 7, 11, 4]
