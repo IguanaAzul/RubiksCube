@@ -1,4 +1,4 @@
-from rubiks_cube import scramble_generator
+from utils import scramble_generator
 
 
 def bogo_cube(cube, how_long=10000):

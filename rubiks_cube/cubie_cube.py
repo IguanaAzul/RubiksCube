@@ -13,35 +13,37 @@ class CubieCube:
                   way)
 
     def corner_turn(self, turn, corners_to_swap, way):
-        for corner in corners_to_swap:
-            if turn == 0 or turn == 3:
-                # U or D
-                if self.pieces[corner][1] == 2:
-                    self.pieces[corner][1] = 1
-                elif self.pieces[corner][1] == 1:
-                    self.pieces[corner][1] = 2
-            if turn == 1 or turn == 4:
-                # F or D
-                if self.pieces[corner][1] == 2:
-                    self.pieces[corner][1] = 0
-                elif self.pieces[corner][1] == 0:
-                    self.pieces[corner][1] = 2
-            if turn == 2 or turn == 4:
-                # R or L
-                if self.pieces[corner][1] == 1:
-                    self.pieces[corner][1] = 0
-                elif self.pieces[corner][1] == 0:
-                    self.pieces[corner][1] = 1
+        if way != 2:
+            for corner in corners_to_swap:
+                if turn == 0 or turn == 3:
+                    # U or D
+                    if self.pieces[corner][1] == 2:
+                        self.pieces[corner][1] = 1
+                    elif self.pieces[corner][1] == 1:
+                        self.pieces[corner][1] = 2
+                if turn == 1 or turn == 4:
+                    # F or B
+                    if self.pieces[corner][1] == 2:
+                        self.pieces[corner][1] = 0
+                    elif self.pieces[corner][1] == 0:
+                        self.pieces[corner][1] = 2
+                if turn == 2 or turn == 5:
+                    # R or L
+                    if self.pieces[corner][1] == 1:
+                        self.pieces[corner][1] = 0
+                    elif self.pieces[corner][1] == 0:
+                        self.pieces[corner][1] = 1
         self.swap(corners_to_swap, way)
 
     def edges_turn(self, turn, edges_to_swap, way):
-        for edge in edges_to_swap:
-            if turn == 2 or turn == 4:
-                # R or L
-                if self.pieces[edge][1] == 1:
-                    self.pieces[edge][1] = 0
-                elif self.pieces[edge][1] == 0:
-                    self.pieces[edge][1] = 1
+        if way != 2:
+            for edge in edges_to_swap:
+                if turn == 1 or turn == 4:
+                    # F or B
+                    if self.pieces[edge][1] == 1:
+                        self.pieces[edge][1] = 0
+                    elif self.pieces[edge][1] == 0:
+                        self.pieces[edge][1] = 1
         self.swap(edges_to_swap, way)
 
     def turn_face(self, face, way=0):

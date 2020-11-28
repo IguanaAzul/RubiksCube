@@ -56,8 +56,9 @@ class Cube:
         :param scramble: String in official scramble notation.
         :return: None, the cube scrambles inplace.
         """
-        self.face_cube.scramble(scramble)
-        self.cubie_cube.scramble(scramble)
+        if scramble is not None and not scramble == "":
+            self.face_cube.scramble(scramble)
+            self.cubie_cube.scramble(scramble)
 
     def get_matrix(self):
         """
@@ -105,27 +106,18 @@ class Cube:
 
     def save_cube(self, path):
         file = open(path, "wb")
-        pieces_to_num = {tuple(key): value for value, key in enumerate(pieces_ref)}
-        bin_to_save = "".join(["{:0>5}"
-                              .format(bin(pieces_to_num[tuple(piece)])[2:]) for piece in self.cubie_cube.get_pieces()])\
-                      + "".join(self.get_binary_array().astype(str))
+        bin_to_save = "".join(self.get_binary_array().astype(str))
         bin_to_save = bin_to_save
         bin_to_save = int(bin_to_save[::-1], base=2).to_bytes(32, "little")
         file.write(bin_to_save)
 
     def load_cube(self, path):
         file = open(path, "rb")
-        num_to_pieces = {value: key.tolist() for value, key in enumerate(pieces_ref)}
         binary_array = file.read()
-        binary_array = np.array(list("{:0<244}".format(format(int.from_bytes(binary_array, "little"), "032b")[::-1])))
-        load_pieces = pieces_ref.copy()
-        for idx, i in enumerate(np.arange(100, step=5)):
-            load_pieces[idx] = num_to_pieces[int("".join(binary_array[i: i+5].tolist()), 2)]
-
-        binary_array = binary_array[100:].reshape(-1, 3).astype(int)
+        binary_array = np.array(list("{:0<144}".format(format(int.from_bytes(binary_array, "little"), "032b")[::-1])))
+        binary_array = binary_array.reshape(-1, 3).astype(int)
         load_matrix = matrix_ref.copy()
         for i in range(6):
             for j in range(1, 9):
                 load_matrix[i][j] = bin_to_color[tuple(binary_array[i*8+(j-1)])]
-
-        self.set_cube((load_matrix, load_pieces))
+        self.set_cube(load_matrix)
