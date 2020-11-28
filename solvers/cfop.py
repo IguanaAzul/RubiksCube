@@ -21,11 +21,13 @@ def assert_cross_solved(cube):
         return False
 
 
-def assert_fisrt_pair(cube):
+def assert_first_pair(cube):
     pieces = cube.get_pieces()
     if (assert_cross_solved(cube) and
             edges[int(np.where(pieces[:, 0] == FL)[0])] == FL and
-            corners[int(np.where(pieces[:, 0] == DFL)[0]) - 12] == DFL):
+            corners[int(np.where(pieces[:, 0] == DFL)[0]) - 12] == DFL and
+            int(cube.get_pieces()[np.where(cube.get_pieces()[:, 0] == FL)][0, 1]) == 0 and
+            int(cube.get_pieces()[np.where(cube.get_pieces()[:, 0] == DFL)][0, 1]) == 0):
         return True
     else:
         return False
@@ -33,9 +35,11 @@ def assert_fisrt_pair(cube):
 
 def assert_second_pair(cube):
     pieces = cube.get_pieces()
-    if (assert_cross_solved(cube) and assert_fisrt_pair(cube) and
+    if (assert_cross_solved(cube) and assert_first_pair(cube) and
             edges[int(np.where(pieces[:, 0] == FR)[0])] == FR and
-            corners[int(np.where(pieces[:, 0] == DFR)[0]) - 12] == DFR):
+            corners[int(np.where(pieces[:, 0] == DFR)[0]) - 12] == DFR and
+            int(cube.get_pieces()[np.where(cube.get_pieces()[:, 0] == FR)][0, 1]) == 0 and
+            int(cube.get_pieces()[np.where(cube.get_pieces()[:, 0] == DFR)][0, 1]) == 0):
         return True
     else:
         return False
@@ -43,9 +47,11 @@ def assert_second_pair(cube):
 
 def assert_third_pair(cube):
     pieces = cube.get_pieces()
-    if (assert_cross_solved(cube) and assert_fisrt_pair(cube) and assert_second_pair(cube) and
+    if (assert_cross_solved(cube) and assert_first_pair(cube) and assert_second_pair(cube) and
             edges[int(np.where(pieces[:, 0] == RB)[0])] == RB and
-            corners[int(np.where(pieces[:, 0] == DBR)[0]) - 12] == DBR):
+            corners[int(np.where(pieces[:, 0] == DBR)[0]) - 12] == DBR and
+            int(cube.get_pieces()[np.where(cube.get_pieces()[:, 0] == RB)][0, 1]) == 0 and
+            int(cube.get_pieces()[np.where(cube.get_pieces()[:, 0] == DBR)][0, 1]) == 0):
         return True
     else:
         return False
@@ -53,10 +59,12 @@ def assert_third_pair(cube):
 
 def assert_fourth_pair(cube):
     pieces = cube.get_pieces()
-    if (assert_cross_solved(cube) and assert_fisrt_pair(cube) and
+    if (assert_cross_solved(cube) and assert_first_pair(cube) and
             assert_second_pair(cube) and assert_third_pair(cube) and
             edges[int(np.where(pieces[:, 0] == BL)[0])] == BL and
-            corners[int(np.where(pieces[:, 0] == DBL)[0]) - 12] == DBL):
+            corners[int(np.where(pieces[:, 0] == DBL)[0]) - 12] == DBL and
+            int(cube.get_pieces()[np.where(cube.get_pieces()[:, 0] == BL)][0, 1]) == 0 and
+            int(cube.get_pieces()[np.where(cube.get_pieces()[:, 0] == DBL)][0, 1]) == 0):
         return True
     else:
         return False
@@ -267,6 +275,9 @@ def cross(cube):
 
 
 def first_pair(cube):
+    if assert_first_pair(cube):
+        return "", cube
+
     new_cube = rubiks_cube.Cube()
     new_cube.set_cube((cube.get_matrix().copy(), cube.get_pieces().copy()))
 
@@ -334,6 +345,8 @@ def first_pair(cube):
 
 
 def second_pair(cube):
+    if assert_second_pair(cube):
+        return "", cube
     new_cube = rubiks_cube.Cube()
     new_cube.set_cube((cube.get_matrix().copy(), cube.get_pieces().copy()))
 
@@ -398,6 +411,9 @@ def second_pair(cube):
 
 
 def third_pair(cube):
+    if assert_third_pair(cube):
+        return "", cube
+
     new_cube = rubiks_cube.Cube()
     new_cube.set_cube((cube.get_matrix().copy(), cube.get_pieces().copy()))
 
@@ -457,6 +473,9 @@ def third_pair(cube):
 
 
 def fourth_pair(cube):
+    if assert_fourth_pair(cube):
+        return "", cube
+
     new_cube = rubiks_cube.Cube()
     new_cube.set_cube((cube.get_matrix().copy(), cube.get_pieces().copy()))
 
@@ -491,7 +510,7 @@ def fourth_pair(cube):
         pre_move_edge = ""
 
     new_cube.scramble(pre_move_edge)
-    BL_orientation = int(new_cube.get_pieces()[np.where(new_cube.get_pieces()[:, 0] == RB)][0, 1])
+    BL_orientation = int(new_cube.get_pieces()[np.where(new_cube.get_pieces()[:, 0] == BL)][0, 1])
     DBL_orientation = int(new_cube.get_pieces()[np.where(new_cube.get_pieces()[:, 0] == DBL)][0, 1])
     case = ""
     if DBL_orientation == 0 and BL_orientation == 0:
@@ -517,4 +536,4 @@ def f2l(cube):
     second_pair_moves, new_cube = second_pair(new_cube)
     third_pair_moves, new_cube = third_pair(new_cube)
     fourth_pair_moves, new_cube = fourth_pair(new_cube)
-    return " ".join((first_pair_moves, second_pair_moves, third_pair_moves, fourth_pair_moves)), new_cube
+    return " . ".join((first_pair_moves, second_pair_moves, third_pair_moves, fourth_pair_moves)), new_cube
