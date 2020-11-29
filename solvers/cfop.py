@@ -740,4 +740,4 @@ def second_look_oll(cube):
 def oll(cube):
     first_look, new_cube = first_look_oll(cube)
     second_look, new_cube = second_look_oll(new_cube)
-    return " . ".join((first_look, second_look)), new_cube
+    return " ".join((first_look, second_look)), new_cube
