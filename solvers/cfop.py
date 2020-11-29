@@ -536,7 +536,7 @@ def f2l(cube):
     second_pair_moves, new_cube = second_pair(new_cube)
     third_pair_moves, new_cube = third_pair(new_cube)
     fourth_pair_moves, new_cube = fourth_pair(new_cube)
-    return " . ".join((first_pair_moves, second_pair_moves, third_pair_moves, fourth_pair_moves)), new_cube
+    return " ".join((first_pair_moves, second_pair_moves, third_pair_moves, fourth_pair_moves)), new_cube
 
 
 def assert_first_look_oll(cube):
@@ -620,21 +620,21 @@ def second_look_oll(cube):
 
     if "0 1 1 1" in " ".join(str(i) for i in (pieces_orientation_array * 2)):
         # sune or antisune, let's find the right orientation
-        if pieces_orientation_array == [0,1,1,1]:
+        if pieces_orientation_array == [0, 1, 1, 1]:
             if pieces[13][1] == 1:
                 setup = ""
                 case = "sune"
             else:
                 setup = "U2"
                 case = "antisune"
-        elif pieces_orientation_array == [1,0,1,1]:
+        elif pieces_orientation_array == [1, 0, 1, 1]:
             if pieces[12][1] == 2:
                 setup = "U"
                 case = "sune"
             else:
                 setup = "U'"
                 case = "antisune"
-        elif pieces_orientation_array == [1,1,0,1]:
+        elif pieces_orientation_array == [1, 1, 0, 1]:
             if pieces[12][1] == 2:
                 setup = "U2"
                 case = "sune"
@@ -655,43 +655,43 @@ def second_look_oll(cube):
             case = setup + " R U2 R' U' R U' R'"
 
     elif "0 0 1 1" in " ".join(str(i) for i in (pieces_orientation_array * 2)):
-        # pi or superman, let's find the right orientation
-        if pieces_orientation_array == [0,0,1,1]:
+        # T or superman, let's find the right orientation
+        if pieces_orientation_array == [0, 0, 1, 1]:
             if pieces[14][1] == 2:
                 setup = "U'"
-                case = "pi"
+                case = "T"
             else:
                 setup = ""
                 case = "superman"
-        elif pieces_orientation_array == [1,0,0,1]:
+        elif pieces_orientation_array == [1, 0, 0, 1]:
             if pieces[12][1] == 1:
                 setup = ""
-                case = "pi"
+                case = "T"
             else:
                 setup = "U"
                 case = "superman"
-        elif pieces_orientation_array == [1,1,0,0]:
+        elif pieces_orientation_array == [1, 1, 0, 0]:
             if pieces[12][1] == 2:
                 setup = "U"
-                case = "pi"
+                case = "T"
             else:
                 setup = "U2"
                 case = "superman"
         else:
             if pieces[13][1] == 1:
                 setup = "U2"
-                case = "pi"
+                case = "T"
             else:
                 setup = "U'"
                 case = "superman"
 
-        if case == "pi":
+        if case == "T":
             case = setup + " L F R' F' L' F R F'"
         else:
             case = setup + " R2 D' R U2 R' D R U2 R"
     elif "0 1 0 1" in " ".join(str(i) for i in (pieces_orientation_array * 2)):
         # L, let's find the right orientation
-        if pieces_orientation_array == [0,1,0,1]:
+        if pieces_orientation_array == [0, 1, 0, 1]:
             if pieces[13][1] == 2:
                 setup = "U'"
             else:
@@ -705,8 +705,30 @@ def second_look_oll(cube):
 
     else:
         # cross, let's find the right orientation
-        print("treat cross case")
-        case = ""
+        pieces_orientation_array = [pieces[12][1], pieces[13][1], pieces[14][1], pieces[15][1]]
+        if pieces_orientation_array == [2, 2, 2, 2]:
+            setup = ""
+            case = "doublesune"
+        elif pieces_orientation_array == [1, 1, 1, 1]:
+            setup = "U"
+            case = "doublesune"
+        elif pieces_orientation_array == [2, 1, 1, 2]:
+            setup = ""
+            case = "pi"
+        elif pieces_orientation_array == [1, 1, 2, 2]:
+            setup = "U"
+            case = "pi"
+        elif pieces_orientation_array == [1, 2, 2, 1]:
+            setup = "U2"
+            case = "pi"
+        else:
+            setup = "U'"
+            case = "pi"
+
+        if case == "doublesune":
+            case = setup + " R U R' U R U' R' U R U2 R'"
+        else:
+            case = setup + " R U2 R2 U' R2 U' R2 U2 R"
 
     new_cube.scramble(case)
     return case, new_cube
