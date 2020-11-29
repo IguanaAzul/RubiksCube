@@ -537,3 +537,185 @@ def f2l(cube):
     third_pair_moves, new_cube = third_pair(new_cube)
     fourth_pair_moves, new_cube = fourth_pair(new_cube)
     return " . ".join((first_pair_moves, second_pair_moves, third_pair_moves, fourth_pair_moves)), new_cube
+
+
+def assert_first_look_oll(cube):
+    pieces = cube.get_pieces()
+    if (int(pieces[np.where(pieces[:, 0] == UF)][0, 1]) == 0 and
+            int(pieces[np.where(pieces[:, 0] == UR)][0, 1]) == 0 and
+            int(pieces[np.where(pieces[:, 0] == UB)][0, 1]) == 0 and
+            int(pieces[np.where(pieces[:, 0] == UL)][0, 1]) == 0):
+        return True
+    else:
+        return False
+
+
+def assert_oll(cube):
+    pieces = cube.get_pieces()
+    if (int(pieces[np.where(pieces[:, 0] == UF)][0, 1]) == 0 and
+            int(pieces[np.where(pieces[:, 0] == UR)][0, 1]) == 0 and
+            int(pieces[np.where(pieces[:, 0] == UB)][0, 1]) == 0 and
+            int(pieces[np.where(pieces[:, 0] == UL)][0, 1]) == 0 and
+            int(pieces[np.where(pieces[:, 0] == UBL)][0, 1]) == 0 and
+            int(pieces[np.where(pieces[:, 0] == UBR)][0, 1]) == 0 and
+            int(pieces[np.where(pieces[:, 0] == UFL)][0, 1]) == 0 and
+            int(pieces[np.where(pieces[:, 0] == UFR)][0, 1]) == 0):
+        return True
+    else:
+        return False
+
+
+def first_look_oll(cube):
+    if assert_first_look_oll(cube):
+        return "", cube
+
+    new_cube = rubiks_cube.Cube()
+    new_cube.set_cube((cube.get_matrix().copy(), cube.get_pieces().copy()))
+
+    pieces = new_cube.get_pieces()
+
+    if pieces[0][1] == 0:
+        if pieces[1][1] == 0:
+            if pieces[2][1] == 1:
+                # if two first edges are oriented, but the third is not, then is a L case starting with U2
+                case = "U2 F U R U' R' F'"
+        else:
+            if pieces[2][1] == 0:
+                # if first and third are oriented, then is a line case starting with U
+                case = "U F R U R' U' F'"
+            else:
+                # if first and fourth are oriented, then is a L case starting with U
+                case = "U F U R U' R' F'"
+    else:
+        if pieces[1][1] == 0:
+            if pieces[2][1] == 0:
+                # if second and third are oriented, then is a L case starting with U'
+                case = "U' F U R U' R' F'"
+            else:
+                # if second and fourth are oriented, then is a line case
+                case = "F R U R' U' F'"
+        else:
+            if pieces[2][1] == 0:
+                # if third and fourth are oriented, then is a L case
+                case = "F U R U' R' F'"
+            else:
+                # if none are oriented, then is a dot case
+                case = "R U2 R2 F R F' U2 R' F R F'"
+
+    new_cube.scramble(case)
+    return case, new_cube
+
+
+def second_look_oll(cube):
+    if assert_oll(cube):
+        return "", cube
+
+    new_cube = rubiks_cube.Cube()
+    new_cube.set_cube((cube.get_matrix().copy(), cube.get_pieces().copy()))
+
+    pieces = new_cube.get_pieces()
+
+    pieces_orientation_array = [i if i == 0 else 1
+                                for i in [pieces[12][1], pieces[13][1], pieces[14][1], pieces[15][1]]]
+
+    if "0 1 1 1" in " ".join(str(i) for i in (pieces_orientation_array * 2)):
+        # sune or antisune, let's find the right orientation
+        if pieces_orientation_array == [0,1,1,1]:
+            if pieces[13][1] == 1:
+                setup = ""
+                case = "sune"
+            else:
+                setup = "U2"
+                case = "antisune"
+        elif pieces_orientation_array == [1,0,1,1]:
+            if pieces[12][1] == 2:
+                setup = "U"
+                case = "sune"
+            else:
+                setup = "U'"
+                case = "antisune"
+        elif pieces_orientation_array == [1,1,0,1]:
+            if pieces[12][1] == 2:
+                setup = "U2"
+                case = "sune"
+            else:
+                setup = ""
+                case = "antisune"
+        else:
+            if pieces[12][1] == 2:
+                setup = "U'"
+                case = "sune"
+            else:
+                setup = "U"
+                case = "antisune"
+
+        if case == "sune":
+            case = setup + " R U R' U R U2 R'"
+        else:
+            case = setup + " R U2 R' U' R U' R'"
+
+    elif "0 0 1 1" in " ".join(str(i) for i in (pieces_orientation_array * 2)):
+        # pi or superman, let's find the right orientation
+        if pieces_orientation_array == [0,0,1,1]:
+            if pieces[14][1] == 2:
+                setup = "U'"
+                case = "pi"
+            else:
+                setup = ""
+                case = "superman"
+        elif pieces_orientation_array == [1,0,0,1]:
+            if pieces[12][1] == 1:
+                setup = ""
+                case = "pi"
+            else:
+                setup = "U"
+                case = "superman"
+        elif pieces_orientation_array == [1,1,0,0]:
+            if pieces[12][1] == 2:
+                setup = "U"
+                case = "pi"
+            else:
+                setup = "U2"
+                case = "superman"
+        else:
+            if pieces[13][1] == 1:
+                setup = "U2"
+                case = "pi"
+            else:
+                setup = "U'"
+                case = "superman"
+
+        if case == "pi":
+            case = setup + " L F R' F' L' F R F'"
+        else:
+            case = setup + " R2 D' R U2 R' D R U2 R"
+    elif "0 1 0 1" in " ".join(str(i) for i in (pieces_orientation_array * 2)):
+        # L, let's find the right orientation
+        if pieces_orientation_array == [0,1,0,1]:
+            if pieces[13][1] == 2:
+                setup = "U'"
+            else:
+                setup = "U"
+        else:
+            if pieces[12][1] == 2:
+                setup = ""
+            else:
+                setup = "U2"
+        case = setup + " R' F' L' F R F' L F"
+
+    else:
+        # cross, let's find the right orientation
+        print("treat cross case")
+        case = ""
+
+    new_cube.scramble(case)
+    return case, new_cube
+
+
+#     BL_orientation = int(new_cube.get_pieces()[np.where(new_cube.get_pieces()[:, 0] == BL)][0, 1])
+#     DBR_position = corners[int(np.where(new_cube.get_pieces()[:, 0] == DBR)[0]) - len(edges)]
+#     UD_position = edges[int(np.where(new_cube.get_pieces()[:, 0] == UD)[0])]
+def oll(cube):
+    first_look, new_cube = first_look_oll(cube)
+    second_look, new_cube = second_look_oll(new_cube)
+    return " . ".join((first_look, second_look)), new_cube
