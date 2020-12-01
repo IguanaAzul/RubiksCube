@@ -9,7 +9,7 @@ setup(
     author_email='ramon.griffo98@gmail.com',
     license='MIT License',
     packages=['rubiks_cube'],
-    install_requires=['numpy', 'kociemba'],
+    install_requires=['numpy'],
     long_description='This library implements a 3x3x3 rubiks cube for general purpose in python.\n'
                      'It provides Rubiks Cube implemented using numpy arrays with a function to turn the cube faces, '
                      'as you would turn a real cube, '

@@ -60,20 +60,20 @@ class Cube:
             self.face_cube.scramble(scramble)
             self.cubie_cube.scramble(scramble)
 
-    def get_matrix(self):
+    def get_color_matrix(self):
         """
         Returns color matrix.
         :return: Color Matrix
         """
-        return self.face_cube.get_matrix()
+        return self.face_cube.get_color_matrix()
 
     def set_cube(self, setter):
         if type(setter) is tuple:
-            self.face_cube.set_matrix(setter[0])
+            self.face_cube.set_color_matrix(setter[0])
             self.cubie_cube.set_pieces(setter[1])
         elif isinstance(setter, np.ndarray):
             if setter.shape == matrix_ref.shape:
-                self.face_cube.set_matrix(setter)
+                self.face_cube.set_color_matrix(setter)
                 self.cubie_cube.set_pieces_from_matrix(setter)
             elif setter.shape == pieces_ref.shape:
                 self.face_cube.set_matrix_from_pieces(setter)

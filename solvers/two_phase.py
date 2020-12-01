@@ -7,7 +7,7 @@ max_depth = 10
 
 
 def is_g1(cube):
-    matrix = cube.get_matrix()
+    matrix = cube.get_color_matrix()
     if matrix[0, 0] != "w":
         print("Error: This method only supports cubes with white in position 0")
         return None
@@ -17,7 +17,7 @@ def is_g1(cube):
 
 
 def count_oriented(cube):
-    matrix = cube.get_matrix()
+    matrix = cube.get_color_matrix()
     if matrix[0, 0] != "w":
         print("Error: This method only supports cubes with white in position 0")
         return None
@@ -48,7 +48,7 @@ def successors(node, cost):
     cubes = list()
     for move in allowed_moves:
         openning_node_cube = rubiks_cube.Cube()
-        openning_node_cube.set_matrix(node[1].get_matrix().copy())
+        openning_node_cube.set_matrix(node[1].get_color_matrix().copy())
         openning_node_cube.set_pieces(node[1].get_pieces().copy())
         openning_node_cube.scramble(move)
         f_openning_node = calc_cost(cost, openning_node_cube)
@@ -58,7 +58,7 @@ def successors(node, cost):
 
 def ida_star(cube):
     cube_node = rubiks_cube.Cube()
-    cube_node.set_matrix(cube.get_matrix().copy())
+    cube_node.set_matrix(cube.get_color_matrix().copy())
     cube_node.set_pieces(cube.get_pieces().copy())
     path = [("", cube_node)]
     bound = calc_cost(0, path[-1][1])

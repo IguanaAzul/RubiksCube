@@ -3,9 +3,9 @@ from itertools import groupby
 
 U, F, R, D, B, L = ("w", "g", "r", "y", "b", "o")
 colors = [U, F, R, D, B, L]
-UF, UR, UB, UL, FL, FR, RB, BL, DF, DR, DB, DL = (U+F, U+R, U+B, U+L, F+L, F+R, R+B, B+L, D+F, D+R, D+B, D+L)
+UF, UR, UB, UL, FL, FR, BR, BL, DF, DR, DB, DL = (U + F, U + R, U + B, U + L, F + L, F + R, B + R, B + L, D + F, D + R, D + B, D + L)
 
-edges = [UF, UR, UB, UL, FL, FR, RB, BL, DF, DR, DB, DL]
+edges = [UF, UR, UB, UL, FL, FR, BR, BL, DF, DR, DB, DL]
 
 UFL, UFR, UBR, UBL, DFL, DFR, DBR, DBL = (U+F+L, U+F+R, U+B+R, U+B+L, D+F+L, D+F+R, D+B+R, D+B+L)
 corners = UFL, UFR, UBR, UBL, DFL, DFR, DBR, DBL
@@ -15,7 +15,7 @@ matrix_ref = np.array([[U, U, U, U, U, U, U, U, U], [F, F, F, F, F, F, F, F, F],
                        [B, B, B, B, B, B, B, B, B], [L, L, L, L, L, L, L, L, L]])
 
 pieces_ref = np.array([[UF, 0], [UR, 0], [UB, 0], [UL, 0],
-                       [FL, 0], [FR, 0], [RB, 0], [BL, 0],
+                       [FL, 0], [FR, 0], [BR, 0], [BL, 0],
                        [DF, 0], [DR, 0], [DB, 0], [DL, 0],
                        [UFL, 0], [UFR, 0], [UBR, 0], [UBL, 0],
                        [DFL, 0], [DFR, 0], [DBR, 0], [DBL, 0]], dtype=object)

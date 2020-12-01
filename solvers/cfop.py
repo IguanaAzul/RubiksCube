@@ -2,7 +2,7 @@ from rubiks_cube import rubiks_cube
 import numpy as np
 from utils import edges, corners, \
     U, F, R, D, B, L, \
-    UF, UR, UB, UL, FL, FR, RB, BL, DF, DR, DB, DL, \
+    UF, UR, UB, UL, FL, FR, BR, BL, DF, DR, DB, DL, \
     UFL, UFR, UBR, UBL, DFL, DFR, DBR, DBL
 
 
@@ -48,9 +48,9 @@ def assert_second_pair(cube):
 def assert_third_pair(cube):
     pieces = cube.get_pieces()
     if (assert_cross_solved(cube) and assert_first_pair(cube) and assert_second_pair(cube) and
-            edges[int(np.where(pieces[:, 0] == RB)[0])] == RB and
+            edges[int(np.where(pieces[:, 0] == BR)[0])] == BR and
             corners[int(np.where(pieces[:, 0] == DBR)[0]) - 12] == DBR and
-            int(cube.get_pieces()[np.where(cube.get_pieces()[:, 0] == RB)][0, 1]) == 0 and
+            int(cube.get_pieces()[np.where(cube.get_pieces()[:, 0] == BR)][0, 1]) == 0 and
             int(cube.get_pieces()[np.where(cube.get_pieces()[:, 0] == DBR)][0, 1]) == 0):
         return True
     else:
@@ -72,7 +72,7 @@ def assert_fourth_pair(cube):
 
 def cross(cube):
     new_cube = rubiks_cube.Cube()
-    new_cube.set_cube((cube.get_matrix().copy(), cube.get_pieces().copy()))
+    new_cube.set_cube((cube.get_color_matrix().copy(), cube.get_pieces().copy()))
     cross_solution = list()
     # find piece DF
     DF_position = edges[int(np.where(new_cube.get_pieces()[:, 0] == DF)[0])]
@@ -111,7 +111,7 @@ def cross(cube):
         move = "L D"
     elif DF_position == FR and DF_orientation == 0:
         move = "R' D'"
-    elif DF_position == RB and DF_orientation == 0:
+    elif DF_position == BR and DF_orientation == 0:
         move = "R D'"
     elif DF_position == BL and DF_orientation == 0:
         move = "L' D"
@@ -119,7 +119,7 @@ def cross(cube):
         move = "F'"
     elif DF_position == FR and DF_orientation == 1:
         move = "F"
-    elif DF_position == RB and DF_orientation == 1:
+    elif DF_position == BR and DF_orientation == 1:
         move = "R2 F"
     elif DF_position == BL and DF_orientation == 1:
         move = "L2 F'"
@@ -162,7 +162,7 @@ def cross(cube):
         move = "D2 L D2"
     elif DR_position == FR and DR_orientation == 0:
         move = "R'"
-    elif DR_position == RB and DR_orientation == 0:
+    elif DR_position == BR and DR_orientation == 0:
         move = "R"
     elif DR_position == BL and DR_orientation == 0:
         move = "B2 R"
@@ -170,7 +170,7 @@ def cross(cube):
         move = "D' F' D"
     elif DR_position == FR and DR_orientation == 1:
         move = "D' F D"
-    elif DR_position == RB and DR_orientation == 1:
+    elif DR_position == BR and DR_orientation == 1:
         move = "D B' D'"
     elif DR_position == BL and DR_orientation == 1:
         move = "D B D'"
@@ -209,7 +209,7 @@ def cross(cube):
         move = "D L D'"
     elif DB_position == FR and DB_orientation == 0:
         move = "D' R' D"
-    elif DB_position == RB and DB_orientation == 0:
+    elif DB_position == BR and DB_orientation == 0:
         move = "D' R D"
     elif DB_position == BL and DB_orientation == 0:
         move = "D L' D'"
@@ -217,7 +217,7 @@ def cross(cube):
         move = "L2 B"
     elif DB_position == FR and DB_orientation == 1:
         move = "R2 B' R2"
-    elif DB_position == RB and DB_orientation == 1:
+    elif DB_position == BR and DB_orientation == 1:
         move = "B'"
     elif DB_position == BL and DB_orientation == 1:
         move = "B"
@@ -253,7 +253,7 @@ def cross(cube):
         move = "L"
     elif DL_position == FR and DL_orientation == 0:
         move = "D2 R' D2"
-    elif DL_position == RB and DL_orientation == 0:
+    elif DL_position == BR and DL_orientation == 0:
         move = "D2 R D2"
     elif DL_position == BL and DL_orientation == 0:
         move = "L'"
@@ -261,7 +261,7 @@ def cross(cube):
         move = "D F' D'"
     elif DL_position == FR and DL_orientation == 1:
         move = "D F D'"
-    elif DL_position == RB and DL_orientation == 1:
+    elif DL_position == BR and DL_orientation == 1:
         move = "D' B' D"
     elif DL_position == BL and DL_orientation == 1:
         move = "D' B D"
@@ -279,7 +279,7 @@ def first_pair(cube):
         return "", cube
 
     new_cube = rubiks_cube.Cube()
-    new_cube.set_cube((cube.get_matrix().copy(), cube.get_pieces().copy()))
+    new_cube.set_cube((cube.get_color_matrix().copy(), cube.get_pieces().copy()))
 
     # find corner DFL
     DFL_position = corners[int(np.where(new_cube.get_pieces()[:, 0] == DFL)[0]) - len(edges)]
@@ -316,7 +316,7 @@ def first_pair(cube):
         pre_move_edge = "U L' U' L U'"
     elif FL_position == FR:
         pre_move_edge = "F' U' F"
-    elif FL_position == RB:
+    elif FL_position == BR:
         pre_move_edge = "R' U R U'"
     elif FL_position == BL:
         pre_move_edge = "L U2 L'"
@@ -348,7 +348,7 @@ def second_pair(cube):
     if assert_second_pair(cube):
         return "", cube
     new_cube = rubiks_cube.Cube()
-    new_cube.set_cube((cube.get_matrix().copy(), cube.get_pieces().copy()))
+    new_cube.set_cube((cube.get_color_matrix().copy(), cube.get_pieces().copy()))
 
     # find corner DFR
     DFR_position = corners[int(np.where(new_cube.get_pieces()[:, 0] == DFR)[0]) - len(edges)]
@@ -381,7 +381,7 @@ def second_pair(cube):
         pre_move_edge = "R' U R"
     elif FR_position == FR:
         pre_move_edge = "U F' U' F U'"
-    elif FR_position == RB:
+    elif FR_position == BR:
         pre_move_edge = "R' U' R"
     elif FR_position == BL:
         pre_move_edge = "U' L U L'"
@@ -415,7 +415,7 @@ def third_pair(cube):
         return "", cube
 
     new_cube = rubiks_cube.Cube()
-    new_cube.set_cube((cube.get_matrix().copy(), cube.get_pieces().copy()))
+    new_cube.set_cube((cube.get_color_matrix().copy(), cube.get_pieces().copy()))
 
     # find corner DBR
     DBR_position = corners[int(np.where(new_cube.get_pieces()[:, 0] == DBR)[0]) - len(edges)]
@@ -437,14 +437,14 @@ def third_pair(cube):
     new_cube.scramble(pre_move_corner)
 
     # find edge BR, move to be opposite to the corner (UL)
-    BR_position = edges[int(np.where(new_cube.get_pieces()[:, 0] == RB)[0])]
+    BR_position = edges[int(np.where(new_cube.get_pieces()[:, 0] == BR)[0])]
     if BR_position == UF:
         pre_move_edge = "B' U B"
     elif BR_position == UR:
         pre_move_edge = "B' U2 B"
     elif BR_position == UB:
         pre_move_edge = "U' B U' B' U"
-    elif BR_position == RB:
+    elif BR_position == BR:
         pre_move_edge = "U R' U' R U'"
     elif BR_position == BL:
         pre_move_edge = "B' U' B"
@@ -452,7 +452,7 @@ def third_pair(cube):
         pre_move_edge = ""
 
     new_cube.scramble(pre_move_edge)
-    BR_orientation = int(new_cube.get_pieces()[np.where(new_cube.get_pieces()[:, 0] == RB)][0, 1])
+    BR_orientation = int(new_cube.get_pieces()[np.where(new_cube.get_pieces()[:, 0] == BR)][0, 1])
     DBR_orientation = int(new_cube.get_pieces()[np.where(new_cube.get_pieces()[:, 0] == DBR)][0, 1])
     if DBR_orientation == 0 and BR_orientation == 0:
         case = "R' F' U2 F R"
@@ -477,7 +477,7 @@ def fourth_pair(cube):
         return "", cube
 
     new_cube = rubiks_cube.Cube()
-    new_cube.set_cube((cube.get_matrix().copy(), cube.get_pieces().copy()))
+    new_cube.set_cube((cube.get_color_matrix().copy(), cube.get_pieces().copy()))
 
     # find corner DBL
     DBL_position = corners[int(np.where(new_cube.get_pieces()[:, 0] == DBL)[0]) - len(edges)]
@@ -541,7 +541,8 @@ def f2l(cube):
 
 def assert_first_look_oll(cube):
     pieces = cube.get_pieces()
-    if (int(pieces[np.where(pieces[:, 0] == UF)][0, 1]) == 0 and
+    if (assert_fourth_pair(cube) and
+            int(pieces[np.where(pieces[:, 0] == UF)][0, 1]) == 0 and
             int(pieces[np.where(pieces[:, 0] == UR)][0, 1]) == 0 and
             int(pieces[np.where(pieces[:, 0] == UB)][0, 1]) == 0 and
             int(pieces[np.where(pieces[:, 0] == UL)][0, 1]) == 0):
@@ -552,10 +553,7 @@ def assert_first_look_oll(cube):
 
 def assert_oll(cube):
     pieces = cube.get_pieces()
-    if (int(pieces[np.where(pieces[:, 0] == UF)][0, 1]) == 0 and
-            int(pieces[np.where(pieces[:, 0] == UR)][0, 1]) == 0 and
-            int(pieces[np.where(pieces[:, 0] == UB)][0, 1]) == 0 and
-            int(pieces[np.where(pieces[:, 0] == UL)][0, 1]) == 0 and
+    if (assert_fourth_pair(cube) and assert_first_look_oll(cube) and
             int(pieces[np.where(pieces[:, 0] == UBL)][0, 1]) == 0 and
             int(pieces[np.where(pieces[:, 0] == UBR)][0, 1]) == 0 and
             int(pieces[np.where(pieces[:, 0] == UFL)][0, 1]) == 0 and
@@ -570,7 +568,7 @@ def first_look_oll(cube):
         return "", cube
 
     new_cube = rubiks_cube.Cube()
-    new_cube.set_cube((cube.get_matrix().copy(), cube.get_pieces().copy()))
+    new_cube.set_cube((cube.get_color_matrix().copy(), cube.get_pieces().copy()))
 
     pieces = new_cube.get_pieces()
 
@@ -611,7 +609,7 @@ def second_look_oll(cube):
         return "", cube
 
     new_cube = rubiks_cube.Cube()
-    new_cube.set_cube((cube.get_matrix().copy(), cube.get_pieces().copy()))
+    new_cube.set_cube((cube.get_color_matrix().copy(), cube.get_pieces().copy()))
 
     pieces = new_cube.get_pieces()
 
