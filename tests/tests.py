@@ -1,7 +1,7 @@
 import unittest
 from solvers.cfop import cross, assert_cross_solved, f2l, first_pair, second_pair, third_pair, fourth_pair, \
     assert_first_pair, assert_second_pair, assert_third_pair, assert_fourth_pair, first_look_oll, \
-    assert_first_look_oll, assert_oll, oll
+    assert_first_look_oll, assert_oll, oll, pll, cfop
 from rubiks_cube.rubiks_cube import Cube
 from utils import scramble_generator
 
@@ -92,8 +92,32 @@ class TestCFOP(unittest.TestCase):
             f2l_solution, f2l_cube = f2l(cross_cube)
             oll_solution, oll_cube = oll(f2l_cube)
             self.assertTrue(assert_oll(oll_cube),
-                            msg="error on scramble: \"{0}\"\ncross: \"{1}\"\nf2l: \"{2}\"\nfirst look oll: \"{3}\"".
+                            msg="error on scramble: \"{0}\"\ncross: \"{1}\"\nf2l: \"{2}\"\noll: \"{3}\"".
                             format(scramble, cross_solution, f2l_solution, oll_solution))
+
+    def test_08_pll(self):
+        for i in range(1000):
+            cube = Cube()
+            scramble = scramble_generator(20)
+            cube.scramble(scramble)
+            cross_solution, cross_cube = cross(cube)
+            f2l_solution, f2l_cube = f2l(cross_cube)
+            oll_solution, oll_cube = oll(f2l_cube)
+            pll_solution, pll_cube = pll(oll_cube)
+            self.assertTrue(pll_cube.is_solved(),
+                            msg="error on scramble: \"{0}\"\ncross: \"{1}\"\nf2l: \"{2}\"\noll: \"{3}\"\npll: \"{4}\"".
+                            format(scramble, cross_solution, f2l_solution, oll_solution, pll_solution))
+
+    def test_09_cfop(self):
+        for i in range(1000):
+            cube = Cube()
+            scramble = scramble_generator(20)
+            cube.scramble(scramble)
+            solution, new_cube = cfop(cube)
+            cube.scramble(solution)
+            self.assertTrue(cube.is_solved(),
+                            msg="error on scramble: \"{0}\"\nsolution: \"{1}".
+                            format(scramble, solution))
 
 
 if __name__ == '__main__':

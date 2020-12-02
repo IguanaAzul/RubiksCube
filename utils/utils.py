@@ -6,6 +6,8 @@ colors = [U, F, R, D, B, L]
 UF, UR, UB, UL, FL, FR, BR, BL, DF, DR, DB, DL = (U + F, U + R, U + B, U + L, F + L, F + R, B + R, B + L, D + F, D + R, D + B, D + L)
 
 edges = [UF, UR, UB, UL, FL, FR, BR, BL, DF, DR, DB, DL]
+edges_dict = {keys: values for keys, values in zip(edges, np.arange(12))}
+
 
 UFL, UFR, UBR, UBL, DFL, DFR, DBR, DBL = (U+F+L, U+F+R, U+B+R, U+B+L, D+F+L, D+F+R, D+B+R, D+B+L)
 corners = UFL, UFR, UBR, UBL, DFL, DFR, DBR, DBL
@@ -75,3 +77,36 @@ def scramble_generator(length):
         elif odds < 200:
             scramble[idx] += 12
     return " ".join([int_to_turn[i] for i in scramble])
+
+
+def fix_scramble(scramble):
+    previous = "  "
+    num = {" ": 1, "'": -1, "2": 2}
+    ways = {1: " ", -1: "'", 2: "2", 3: "'", -2: "2"}
+    scramble = scramble.split()
+    scramble = [move + " " for move in scramble]
+    new_scramble = list()
+    changed = False
+    i = 0
+    for i in range(len(scramble)):
+        now = scramble[i]
+        if now[0] == previous[0]:
+            way = (num[now[1]] + num[previous[1]])
+            if way == 0 or way == 4:
+                now = now.replace(now[0], " ")
+                way = " "
+            else:
+                way = ways[way]
+            changed = True
+            del new_scramble[-1]
+        else:
+            i += 1
+            way = now[1]
+        now = now[0] + str(way)
+        previous = now
+        new_scramble.append(now.replace(" ", ""))
+    new_scramble = " ".join(filter(None, new_scramble))
+    if changed:
+        return fix_scramble(new_scramble)
+    else:
+        return new_scramble

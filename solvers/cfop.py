@@ -1,6 +1,6 @@
 from rubiks_cube import rubiks_cube
 import numpy as np
-from utils import edges, corners, \
+from utils import edges, corners, colors, edges_dict, fix_scramble, \
     U, F, R, D, B, L, \
     UF, UR, UB, UL, FL, FR, BR, BL, DF, DR, DB, DL, \
     UFL, UFR, UBR, UBL, DFL, DFR, DBR, DBL
@@ -739,3 +739,98 @@ def oll(cube):
     first_look, new_cube = first_look_oll(cube)
     second_look, new_cube = second_look_oll(new_cube)
     return " ".join((first_look, second_look)), new_cube
+
+def assert_pll_corners(cube):
+    colors = cube.get_color_matrix()
+    return ((colors[1, 8] == colors[1, 7]) and
+            (colors[2, 5] == colors[2, 8]) and
+            (colors[4, 5] == colors[4, 6]) and
+            (colors[5, 7] == colors[5, 6]))
+
+def pll(cube):
+    pll_a = "R' F R' B2 R F' R' B2 R2"
+    pll_y = "F2 D R2 U R2 D' R' U' R F2 R' U R"
+    look_1 = ""
+    new_cube = rubiks_cube.Cube()
+    new_cube.set_cube((cube.get_color_matrix(), cube.get_pieces()))
+    color_matrix = new_cube.get_color_matrix()
+    post_look_1 = ""
+    if not assert_pll_corners(new_cube):
+        if color_matrix[1, 8] == color_matrix[1, 7]:
+            look_1 += "U2 " + pll_a
+        elif color_matrix[2, 5] == color_matrix[2, 8]:
+            look_1 += "U' " + pll_a
+        elif color_matrix[4, 5] == color_matrix[4, 6]:
+            look_1 += "" + pll_a
+        elif color_matrix[5, 7] == color_matrix[5, 6]:
+            look_1 += "U " + pll_a
+        else:
+            look_1 += pll_y
+
+    new_cube.scramble(look_1)
+
+    if color_matrix[1, 8] == colors[2]:
+        post_look_1 += " U'"
+    elif color_matrix[1, 8] == colors[4]:
+        post_look_1 += " U2"
+    elif color_matrix[1, 8] == colors[5]:
+        post_look_1 += " U"
+
+    new_cube.scramble(post_look_1)
+
+    pll_ua = "R2 U' R' U' R U R U R U' R"
+    pll_ub = "R' U R' U' R' U' R' U R U R2"
+    pll_h = "R2 U2 R U2 R2 U2 R2 U2 R U2 R2"
+    pll_z = "R2 U' R2 U R2 B2 R2 U B2 U' R2 B2"
+
+    facelets = {0: (1, 3), 1: (2, 4), 2: (4, 1), 3: (5, 2)}
+    cases = {"uas": [(0, 2, 3, 1), (2, 1, 3, 0), (1, 3, 2, 0), (1, 2, 0, 3)],
+             "ubs": [(0, 3, 1, 2), (3, 1, 0, 2), (3, 0, 2, 1), (2, 0, 1, 3)],
+             "zs": [(1, 0, 3, 2), (3, 2, 1, 0)]}
+    pre_move = ""
+    look_2 = ""
+    if not new_cube.is_solved():
+        pieces = new_cube.get_pieces()
+        top_edges = pieces[:4, 0]
+        case = tuple([edges_dict[edge] for edge in top_edges])
+        if case in cases["uas"]:
+            if case == cases["uas"][1]:
+                pre_move = "U"
+            elif case == cases["uas"][2]:
+                pre_move = "U2"
+            elif case == cases["uas"][3]:
+                pre_move = "U'"
+            look_2 = pll_ua
+        elif case in cases["ubs"]:
+            if case == cases["ubs"][1]:
+                pre_move = "U"
+            elif case == cases["ubs"][2]:
+                pre_move = "U2"
+            elif case == cases["ubs"][3]:
+                pre_move = "U'"
+            look_2 = pll_ub
+        elif case in cases["zs"]:
+            if case == cases["zs"][1]:
+                pre_move = "U'"
+            look_2 = pll_z
+        else:
+            look_2 = pll_h
+    post_move = ""
+    if pre_move == "U":
+        post_move = "U'"
+    elif pre_move == "U'":
+        post_move = "U"
+    else:
+        post_move = pre_move
+
+    look_2 = " ".join((pre_move, look_2, post_move))
+    new_cube.scramble(look_2)
+    return " ".join((look_1, post_look_1, look_2)), new_cube
+
+
+def cfop(cube):
+    cross_moves, new_cube = cross(cube)
+    f2l_moves, new_cube = f2l(new_cube)
+    oll_moves, new_cube = oll(new_cube)
+    pll_moves, new_cube = pll(new_cube)
+    return fix_scramble(" ".join((cross_moves, f2l_moves, oll_moves, pll_moves))), new_cube
