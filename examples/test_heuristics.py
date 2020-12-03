@@ -1,4 +1,5 @@
-from solvers.two_phase import ida_star
+from solvers.four_phase import four_phase
+from solvers.two_phase import two_phase
 from rubiks_cube import rubiks_cube
 import numpy as np
 import time
@@ -10,6 +11,6 @@ for i in range(len(scramble)):
     s = " ".join(scramble[:i])
     print(s)
     cube.scramble(s)
-    print(ida_star(cube))
+    print(four_phase(cube))
     t = time.time()
     print(t-t0)
