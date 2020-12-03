@@ -174,9 +174,9 @@ class FaceCube:
 
     def set_corner(self, facelets, piece, position):
         type1_corners = [corners[0], corners[2], corners[5], corners[7]]
-        if position > 3:
-            position += 1
-        if (piece[0] in type1_corners and position % 2 == 0) or (piece[0] not in type1_corners and position % 2 == 1):
+        type1_positions = [0, 2, 5, 7]
+        if (piece[0] in type1_corners and position in type1_positions) or \
+                (piece[0] not in type1_corners and position not in type1_positions):
             if piece[1] == 0:
                 self.color_matrix[facelets[0]] = piece[0][0]
                 self.color_matrix[facelets[1]] = piece[0][1]
