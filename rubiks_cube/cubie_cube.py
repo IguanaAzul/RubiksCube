@@ -1,5 +1,5 @@
 import numpy as np
-from utils import pieces_ref, int_face, notation, swap4
+from utils import pieces_ref, int_face, notation, swap4, colors
 
 
 class CubieCube:
@@ -132,6 +132,65 @@ class CubieCube:
     def get_edges_orientation(self):
         return self.pieces[:12, 1]
 
+    def set_edge(self, matrix, facelets, piece_num):
+        if matrix[facelets[0]] == colors[0] or matrix[facelets[1]] == colors[0] or \
+           matrix[facelets[0]] == colors[3] or matrix[facelets[1]] == colors[3]:
+            if matrix[facelets[0]] == colors[0] or matrix[facelets[0]] == colors[3]:
+                self.pieces[piece_num][0] = matrix[facelets[0]] + matrix[facelets[1]]
+                self.pieces[piece_num][1] = 0
+            else:
+                self.pieces[piece_num][0] = matrix[facelets[1]] + matrix[facelets[0]]
+                self.pieces[piece_num][1] = 1
+        else:
+            if matrix[facelets[0]] == colors[1] or matrix[facelets[0]] == colors[4]:
+                self.pieces[piece_num][0] = matrix[facelets[0]] + matrix[facelets[1]]
+                self.pieces[piece_num][1] = 0
+            else:
+                self.pieces[piece_num][0] = matrix[facelets[1]] + matrix[facelets[0]]
+                self.pieces[piece_num][1] = 1
+
+    def set_corner(self, matrix, facelets, piece_num):
+        print(matrix[facelets[0]] + matrix[facelets[1]] + matrix[facelets[2]])
+        if matrix[facelets[0]] == colors[0] or matrix[facelets[0]] == colors[3]:
+            self.pieces[piece_num][1] = 0
+            if matrix[facelets[1]] == colors[1] or matrix[facelets[1]] == colors[4]:
+                self.pieces[piece_num][0] = matrix[facelets[0]] + matrix[facelets[1]] + matrix[facelets[2]]
+            else:
+                self.pieces[piece_num][0] = matrix[facelets[0]] + matrix[facelets[2]] + matrix[facelets[1]]
+        elif matrix[facelets[1]] == colors[0] or matrix[facelets[1]] == colors[3]:
+            self.pieces[piece_num][1] = 1
+            if matrix[facelets[0]] == colors[1] or matrix[facelets[0]] == colors[4]:
+                self.pieces[piece_num][0] = matrix[facelets[1]] + matrix[facelets[0]] + matrix[facelets[2]]
+            else:
+                self.pieces[piece_num][0] = matrix[facelets[1]] + matrix[facelets[2]] + matrix[facelets[0]]
+        else:
+            self.pieces[piece_num][1] = 2
+            if matrix[facelets[0]] == colors[1] or matrix[facelets[0]] == colors[4]:
+                self.pieces[piece_num][0] = matrix[facelets[2]] + matrix[facelets[0]] + matrix[facelets[1]]
+            else:
+                self.pieces[piece_num][0] = matrix[facelets[2]] + matrix[facelets[1]] + matrix[facelets[0]]
+
     def set_pieces_from_matrix(self, matrix):
-        # TODO
-        return
+        # Set edges
+        self.set_edge(matrix, [(0, 1), (1, 3)], 0)      # UF
+        self.set_edge(matrix, [(0, 2), (2, 4)], 1)      # UR
+        self.set_edge(matrix, [(0, 3), (4, 1)], 2)      # UB
+        self.set_edge(matrix, [(0, 4), (5, 2)], 3)      # UL
+        self.set_edge(matrix, [(1, 4), (5, 1)], 4)      # FL
+        self.set_edge(matrix, [(1, 2), (2, 1)], 5)      # FR
+        self.set_edge(matrix, [(4, 2), (2, 3)], 6)      # BR
+        self.set_edge(matrix, [(4, 4), (5, 3)], 7)      # BL
+        self.set_edge(matrix, [(3, 1), (1, 1)], 8)      # DF
+        self.set_edge(matrix, [(3, 4), (2, 2)], 9)      # DR
+        self.set_edge(matrix, [(3, 3), (4, 3)], 10)     # DB
+        self.set_edge(matrix, [(3, 2), (5, 4)], 11)     # DL
+
+        # Set corners
+        self.set_corner(matrix, [(0, 5), (1, 8), (5, 6)], 12)       # UFL
+        self.set_corner(matrix, [(0, 6), (1, 7), (2, 5)], 13)       # UFR
+        self.set_corner(matrix, [(0, 7), (4, 6), (2, 8)], 14)       # UBR
+        self.set_corner(matrix, [(0, 8), (4, 5), (5, 7)], 15)       # UBL
+        self.set_corner(matrix, [(3, 6), (1, 5), (5, 5)], 16)       # DFL
+        self.set_corner(matrix, [(3, 5), (1, 6), (2, 6)], 17)       # DFR
+        self.set_corner(matrix, [(3, 8), (4, 7), (2, 7)], 18)       # DBR
+        self.set_corner(matrix, [(3, 7), (4, 8), (5, 8)], 19)       # DBL

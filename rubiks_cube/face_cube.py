@@ -203,107 +203,35 @@ class FaceCube:
                 self.color_matrix[facelets[1]] = piece[0][1]
                 self.color_matrix[facelets[0]] = piece[0][2]
 
+    def set_edge(self, facelets, piece):
+        if piece[1] == 0:
+            self.color_matrix[facelets[0]] = piece[0][0]
+            self.color_matrix[facelets[1]] = piece[0][1]
+        else:
+            self.color_matrix[facelets[0]] = piece[0][1]
+            self.color_matrix[facelets[1]] = piece[0][0]
+
     def set_matrix_from_pieces(self, pieces):
         # Set from edges
-        # UF
-        if pieces[0, 1] == 0:
-            self.color_matrix[0, 1] = pieces[0, 0][0]
-            self.color_matrix[1, 3] = pieces[0, 0][1]
-        else:
-            self.color_matrix[0, 1] = pieces[0, 0][1]
-            self.color_matrix[1, 3] = pieces[0, 0][0]
-        # UR
-        if pieces[1, 1] == 0:
-            self.color_matrix[0, 2] = pieces[1, 0][0]
-            self.color_matrix[2, 4] = pieces[1, 0][1]
-        else:
-            self.color_matrix[0, 2] = pieces[1, 0][1]
-            self.color_matrix[2, 4] = pieces[1, 0][0]
-        # UB
-        if pieces[2, 1] == 0:
-            self.color_matrix[0, 3] = pieces[2, 0][0]
-            self.color_matrix[4, 1] = pieces[2, 0][1]
-        else:
-            self.color_matrix[0, 3] = pieces[2, 0][1]
-            self.color_matrix[4, 1] = pieces[2, 0][0]
-        # UL
-        if pieces[3, 1] == 0:
-            self.color_matrix[0, 4] = pieces[3, 0][0]
-            self.color_matrix[5, 2] = pieces[3, 0][1]
-        else:
-            self.color_matrix[0, 4] = pieces[3, 0][1]
-            self.color_matrix[5, 2] = pieces[3, 0][0]
-        # FL
-        if pieces[4, 1] == 0:
-            self.color_matrix[1, 4] = pieces[4, 0][0]
-            self.color_matrix[5, 1] = pieces[4, 0][1]
-        else:
-            self.color_matrix[1, 4] = pieces[4, 0][1]
-            self.color_matrix[5, 1] = pieces[4, 0][0]
-        # FR
-        if pieces[5, 1] == 0:
-            self.color_matrix[1, 2] = pieces[5, 0][0]
-            self.color_matrix[2, 1] = pieces[5, 0][1]
-        else:
-            self.color_matrix[1, 2] = pieces[5, 0][1]
-            self.color_matrix[2, 1] = pieces[5, 0][0]
-        # BR
-        if pieces[6, 1] == 0:
-            self.color_matrix[4, 2] = pieces[6, 0][0]
-            self.color_matrix[2, 3] = pieces[6, 0][1]
-        else:
-            self.color_matrix[4, 2] = pieces[6, 0][1]
-            self.color_matrix[2, 3] = pieces[6, 0][0]
-        # BL
-        if pieces[7, 1] == 0:
-            self.color_matrix[4, 4] = pieces[7, 0][0]
-            self.color_matrix[5, 3] = pieces[7, 0][1]
-        else:
-            self.color_matrix[4, 4] = pieces[7, 0][1]
-            self.color_matrix[5, 3] = pieces[7, 0][0]
-        # DF
-        if pieces[8, 1] == 0:
-            self.color_matrix[3, 1] = pieces[8, 0][0]
-            self.color_matrix[1, 1] = pieces[8, 0][1]
-        else:
-            self.color_matrix[3, 1] = pieces[8, 0][1]
-            self.color_matrix[1, 1] = pieces[8, 0][0]
-        # DR
-        if pieces[9, 1] == 0:
-            self.color_matrix[3, 4] = pieces[9, 0][0]
-            self.color_matrix[2, 2] = pieces[9, 0][1]
-        else:
-            self.color_matrix[3, 4] = pieces[9, 0][1]
-            self.color_matrix[2, 2] = pieces[9, 0][0]
-        # DB
-        if pieces[10, 1] == 0:
-            self.color_matrix[3, 3] = pieces[10, 0][0]
-            self.color_matrix[4, 3] = pieces[10, 0][1]
-        else:
-            self.color_matrix[3, 3] = pieces[10, 0][1]
-            self.color_matrix[4, 3] = pieces[10, 0][0]
-        # DL
-        if pieces[11, 1] == 0:
-            self.color_matrix[3, 2] = pieces[11, 0][0]
-            self.color_matrix[5, 4] = pieces[11, 0][1]
-        else:
-            self.color_matrix[3, 2] = pieces[11, 0][1]
-            self.color_matrix[5, 4] = pieces[11, 0][0]
+        self.set_edge([(0, 1), (1, 3)], pieces[0])   # UF
+        self.set_edge([(0, 2), (2, 4)], pieces[1])   # UR
+        self.set_edge([(0, 3), (4, 1)], pieces[2])   # UB
+        self.set_edge([(0, 4), (5, 2)], pieces[3])   # UL
+        self.set_edge([(1, 4), (5, 1)], pieces[4])   # FL
+        self.set_edge([(1, 2), (2, 1)], pieces[5])   # FR
+        self.set_edge([(4, 2), (2, 3)], pieces[6])   # BR
+        self.set_edge([(4, 4), (5, 3)], pieces[7])   # BL
+        self.set_edge([(3, 1), (1, 1)], pieces[8])   # DF
+        self.set_edge([(3, 4), (2, 2)], pieces[9])   # DR
+        self.set_edge([(3, 3), (4, 3)], pieces[10])  # DB
+        self.set_edge([(3, 2), (5, 4)], pieces[11])  # DL
 
         # Set from corners
-        facelets = [(0, 5), (1, 8), (5, 6)]
-        self.set_corner(facelets, pieces[12], 0)
-        facelets = [(0, 6), (1, 7), (2, 5)]
-        self.set_corner(facelets, pieces[13], 1)
-        facelets = [(0, 7), (4, 6), (2, 8)]
-        self.set_corner(facelets, pieces[14], 2)
-        facelets = [(0, 8), (4, 5), (5, 7)]
-        self.set_corner(facelets, pieces[15], 3)
-        facelets = [(3, 6), (1, 5), (5, 5)]
-        self.set_corner(facelets, pieces[16], 4)
-        facelets = [(3, 5), (1, 6), (2, 6)]
-        self.set_corner(facelets, pieces[17], 5)
-        facelets = [(3, 8), (4, 7), (2, 7)]
-        self.set_corner(facelets, pieces[18], 6)
-        facelets = [(3, 7), (4, 8), (5, 8)]
-        self.set_corner(facelets, pieces[19], 7)
+        self.set_corner([(0, 5), (1, 8), (5, 6)], pieces[12], 0)    # UFL
+        self.set_corner([(0, 6), (1, 7), (2, 5)], pieces[13], 1)    # UFR
+        self.set_corner([(0, 7), (4, 6), (2, 8)], pieces[14], 2)    # UBR
+        self.set_corner([(0, 8), (4, 5), (5, 7)], pieces[15], 3)    # UBL
+        self.set_corner([(3, 6), (1, 5), (5, 5)], pieces[16], 4)    # DFL
+        self.set_corner([(3, 5), (1, 6), (2, 6)], pieces[17], 5)    # DFR
+        self.set_corner([(3, 8), (4, 7), (2, 7)], pieces[18], 6)    # DBR
+        self.set_corner([(3, 7), (4, 8), (5, 8)], pieces[19], 7)    # DBL
