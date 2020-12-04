@@ -115,7 +115,7 @@ class CubieCube:
         Returns pieces.
         :return: Pieces
         """
-        return self.pieces
+        return self.pieces.copy()
 
     def set_pieces(self, pieces):
         """
@@ -150,7 +150,6 @@ class CubieCube:
                 self.pieces[piece_num][1] = 1
 
     def set_corner(self, matrix, facelets, piece_num):
-        print(matrix[facelets[0]] + matrix[facelets[1]] + matrix[facelets[2]])
         if matrix[facelets[0]] == colors[0] or matrix[facelets[0]] == colors[3]:
             self.pieces[piece_num][1] = 0
             if matrix[facelets[1]] == colors[1] or matrix[facelets[1]] == colors[4]:

@@ -130,7 +130,7 @@ class FaceCube:
                 return
 
     def get_color_matrix(self):
-        return self.color_matrix
+        return self.color_matrix.copy()
 
     def set_color_matrix(self, matrix):
         self.color_matrix = matrix

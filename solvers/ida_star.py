@@ -53,4 +53,5 @@ def search(path, g, bound, check_function, cost_function, allowed_moves):
                 return t
             least = t if t < least else least
             path.pop()
+            print([i[0] for i in path], t)
     return least

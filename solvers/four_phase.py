@@ -1,9 +1,8 @@
 import numpy as np
 from rubiks_cube import Cube
 from utils import colors, fix_scramble
-from solvers import ida_star
+from solvers.breadth_first_search import bfs
 from time import time
-max_oriented = 18
 
 
 def is_g1(cube):
@@ -24,12 +23,8 @@ def is_g3(cube):
         np.array([i in [colors[1], colors[4]] for i in matrix[4]]).all()
 
 
-def calc_cost_1(cost, cube):
-    return cost + (cube.get_pieces()[:12, 1]).sum()
-
-
-def calc_cost_2(cost, cube):
-    return cost + 12 - (cube.get_pieces()[12:, 1]).sum()
+def is_g4(cube):
+    return cube.is_solved()
 
 
 def four_phase(cube):
@@ -39,18 +34,36 @@ def four_phase(cube):
                      "U'", "R'", "F'", "L'", "B'", "D'",
                      "U2", "R2", "F2", "L2", "B2", "D2"]
     t0 = time()
-    phase1 = ida_star(new_cube, is_g1, calc_cost_1, allowed_moves)
-    new_cube.scramble(phase1)
-    # return fix_scramble(phase1), time() - t0
+    phase1, new_cube = bfs(new_cube, is_g1, allowed_moves)
+    t = time()
+    print("phase1:")
+    print(t-t0)
+    print(phase1)
+    phase1 = " ".join(phase1)
+    allowed_moves = ["U", "D", "U'", "D'", "R", "R'", "L", "L'",
+                     "U2", "R2", "F2", "L2", "B2", "D2"]
+    t0 = time()
+    phase2, new_cube = bfs(new_cube, is_g2, allowed_moves)
+    t = time()
+    print("phase2:")
+    print(t-t0)
+    print(phase2)
+    phase2 = " ".join(phase2)
     allowed_moves = ["U", "D", "U'", "D'",
                      "U2", "R2", "F2", "L2", "B2", "D2"]
-    phase2 = ida_star(new_cube, is_g2, calc_cost_2, allowed_moves)
-    new_cube.scramble(phase2)
-    return fix_scramble(" ".join((phase1, phase2))), time() - t0
-
-
-    phase3 = ida_star(new_cube, is_g2, calc_cost, allowed_moves)
-    new_cube.scramble(phase3)
-    phase4 = ida_star(new_cube, is_g2, calc_cost, allowed_moves)
-    new_cube.scramble(phase4)
-    return fix_scramble(" ".join((phase1, phase2, phase3, phase4))), new_cube
+    t0 = time()
+    phase3, new_cube = bfs(new_cube, is_g3, allowed_moves)
+    t = time()
+    print("phase3:")
+    print(t-t0)
+    print(phase3)
+    phase3 = " ".join(phase3)
+    allowed_moves = ["U2", "R2", "F2", "L2", "B2", "D2"]
+    t0 = time()
+    phase4, new_cube = bfs(new_cube, is_g4, allowed_moves)
+    t = time()
+    print("phase4:")
+    print(t-t0)
+    print(phase4)
+    phase4 = " ".join(phase4)
+    return fix_scramble(" ".join((phase1, phase2, phase3, phase4)))

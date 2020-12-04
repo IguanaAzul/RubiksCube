@@ -65,7 +65,7 @@ class Cube:
         Returns color matrix.
         :return: Color Matrix
         """
-        return self.face_cube.get_color_matrix()
+        return self.face_cube.get_color_matrix().copy()
 
     def set_cube(self, setter):
         if type(setter) is tuple:
@@ -88,7 +88,7 @@ class Cube:
         Returns pieces.
         :return: Pieces
         """
-        return self.cubie_cube.get_pieces()
+        return self.cubie_cube.get_pieces().copy()
 
     def get_binary_array(self, one_hot=False):
         """
@@ -104,20 +104,35 @@ class Cube:
     def get_edges_orientation(self):
         return self.cubie_cube.get_edges_orientation()
 
-    def save_cube(self, path):
-        file = open(path, "wb")
+    def is_equal(self, cube):
+        return (np.array_equal(self.get_color_matrix(), cube.get_color_matrix())) \
+               and (np.array_equal(self.get_pieces(), cube.get_pieces()))
+
+    def is_in(self, cubes):
+        for ccube in cubes:
+            if self.is_equal(ccube):
+                return True
+        return False
+
+    def compress_cube(self):
         bin_to_save = "".join(self.get_binary_array().astype(str))
         bin_to_save = bin_to_save
-        bin_to_save = int(bin_to_save[::-1], base=2).to_bytes(32, "little")
-        file.write(bin_to_save)
+        return int(bin_to_save[::-1], base=2).to_bytes(18, "little")
 
-    def load_cube(self, path):
-        file = open(path, "rb")
-        binary_array = file.read()
-        binary_array = np.array(list("{:0<144}".format(format(int.from_bytes(binary_array, "little"), "032b")[::-1])))
+    def decompress_cube(self, binary_array):
+        binary_array = np.array(list("{:0<144}".format(format(int.from_bytes(binary_array, "little"), "018b")[::-1])))
         binary_array = binary_array.reshape(-1, 3).astype(int)
         load_matrix = matrix_ref.copy()
         for i in range(6):
             for j in range(1, 9):
-                load_matrix[i][j] = bin_to_color[tuple(binary_array[i*8+(j-1)])]
+                load_matrix[i][j] = bin_to_color[tuple(binary_array[i * 8 + (j - 1)])]
         self.set_cube(load_matrix)
+        return self
+
+    def save_cube(self, path):
+        file = open(path, "wb")
+        file.write(self.compress_cube())
+
+    def load_cube(self, path):
+        file = open(path, "rb")
+        self.decompress_cube(file.read())

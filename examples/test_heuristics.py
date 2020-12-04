@@ -1,16 +1,8 @@
 from solvers.four_phase import four_phase
-from solvers.two_phase import two_phase
 from rubiks_cube import rubiks_cube
-import numpy as np
-import time
 
-scramble = "R B R2 F U' L2 D L' U2 R' D' F2 L F' D2 B2 U B'".split(" ")
-for i in range(len(scramble)):
-    cube = rubiks_cube.Cube()
-    t0 = time.time()
-    s = " ".join(scramble[:i])
-    print(s)
-    cube.scramble(s)
-    print(four_phase(cube))
-    t = time.time()
-    print(t-t0)
+scramble = "R B R2 F U' L2 D L' U2 R' D' F2 L F' D2 B2 U B'"
+cube = rubiks_cube.Cube()
+print(scramble)
+cube.scramble(scramble)
+print(four_phase(cube))
