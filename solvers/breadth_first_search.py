@@ -1,3 +1,4 @@
+import numpy as np
 from rubiks_cube import Cube
 
 
@@ -43,4 +44,4 @@ def search(layer, check_function, allowed_moves, lvl):
         for suc in successors(node[0], cube, allowed_moves, node[0][-1]):
             new_layer.append(suc)
     del layer
-    return search(new_layer, check_function, allowed_moves, lvl+1)
+    return search(new_layer, check_function, allowed_moves)
