@@ -1,5 +1,5 @@
 import numpy as np
-from utils import matrix_ref, pieces_ref, bin_to_color
+from utils import matrix_ref, pieces_ref, bin_to_color, flat_matrix_ref, colors
 from rubiks_cube.face_cube import FaceCube
 from rubiks_cube.cubie_cube import CubieCube
 
@@ -119,15 +119,14 @@ class Cube:
         bin_to_save = bin_to_save
         return int(bin_to_save[::-1], base=2).to_bytes(18, "little")
 
-    def decompress_cube(self, binary_array):
-        binary_array = np.array(list("{:0<144}".format(format(int.from_bytes(binary_array, "little"), "018b")[::-1])))
+    def decompress_cube(self, compressed):
+        binary_array = np.array(list("{:0<144}".format(format(int.from_bytes(compressed, "little"), "018b")[::-1])))
         binary_array = binary_array.reshape(-1, 3).astype(int)
         load_matrix = matrix_ref.copy()
         for i in range(6):
             for j in range(1, 9):
                 load_matrix[i][j] = bin_to_color[tuple(binary_array[i * 8 + (j - 1)])]
         self.set_cube(load_matrix)
-        return self
 
     def save_cube(self, path):
         file = open(path, "wb")

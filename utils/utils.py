@@ -16,6 +16,10 @@ matrix_ref = np.array([[U, U, U, U, U, U, U, U, U], [F, F, F, F, F, F, F, F, F],
                        [R, R, R, R, R, R, R, R, R], [D, D, D, D, D, D, D, D, D],
                        [B, B, B, B, B, B, B, B, B], [L, L, L, L, L, L, L, L, L]])
 
+flat_matrix_ref = np.array([U, U, U, U, U, U, U, U, U, F, F, F, F, F, F, F, F, F,
+                       R, R, R, R, R, R, R, R, R, D, D, D, D, D, D, D, D, D,
+                       B, B, B, B, B, B, B, B, B, L, L, L, L, L, L, L, L, L])
+
 pieces_ref = np.array([[UF, 0], [UR, 0], [UB, 0], [UL, 0],
                        [FL, 0], [FR, 0], [BR, 0], [BL, 0],
                        [DF, 0], [DR, 0], [DB, 0], [DL, 0],
