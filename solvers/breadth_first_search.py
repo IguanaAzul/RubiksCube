@@ -38,7 +38,7 @@ def search(path, check_function, allowed_moves):
     layer = [path[-1]]
     lvl = 1
     while not done:
-        print(lvl)
+        # print(lvl)
         new_layer = list()
         for node in layer:
             for suc in successors(node[0], node[1], allowed_moves, node[0][-1]):

@@ -1,49 +1,25 @@
 from rubiks_cube import rubiks_cube
 from utils import scramble_generator
-
-# Create new cube object
-cube = rubiks_cube.Cube()
-
-# Prints the state of the cube
-cube.print()
-
-# Turns the right face of the cube clockwise
-cube.turn_face("R")
-# Prints the state of the cube
-cube.print()
-
-# Turns the right face of the cube counterclockwise
-cube.turn_face("R", 1)
-# Prints the state of the cube (Should be the same as a new cube)
-cube.print()
-
-# Turns the right face of the cube twice
-cube.turn_face("R", 2)
-# Prints the state of the cube
-cube.print()
+from solvers import cfop, four_phase
 
 
 # Create new cube object
 cube = rubiks_cube.Cube()
-
+# Prints the state of the cube
+cube.print()
+# Example of scramble generation
+scramble = scramble_generator(18)
+print(scramble)
 # Example of scramble
 cube.scramble("R B R2 F U' L2 D L' U2 R' D' F2 L F' D2 B2 U B'")
 cube.print()
 
-# Saving the cube:
-cube.save_cube("cube1.rbc")
-cube = rubiks_cube.Cube()
-# Loading the cube:
-cube.load_cube("cube1.rbc")
-cube.print()
+# Solving the cube with CFOP method:
+solution, solved_cube = cfop(cube)
+print(solution)
+solved_cube.print()
 
-# Example of scramble generation
-scramble = scramble_generator(18)
-print(scramble)
-
-# Count number of colors in the correct place
-print(cube.n_colors_in_place())
-
-# Count number of pieces in the correct place
-print(cube.n_pieces_in_place())
-
+# Solving the cube with four-phase Thistlewaite (Takes several hours)
+solution, solved_cube = four_phase(cube)
+print(solution)
+solved_cube.print()

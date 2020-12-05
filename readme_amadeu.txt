@@ -1,0 +1,1 @@
+Olá professor, há um arquivo example.py na pasta examples, com exemplos do funcionamento e de como rodar nosso código :)

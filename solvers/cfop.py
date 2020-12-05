@@ -768,7 +768,7 @@ def pll(cube):
             look_1 += pll_y
 
     new_cube.scramble(look_1)
-
+    color_matrix = new_cube.get_color_matrix()
     if color_matrix[1, 8] == colors[2]:
         post_look_1 += " U'"
     elif color_matrix[1, 8] == colors[4]:
@@ -777,7 +777,7 @@ def pll(cube):
         post_look_1 += " U"
 
     new_cube.scramble(post_look_1)
-
+    color_matrix = new_cube.get_color_matrix()
     pll_ua = "R2 U' R' U' R U R U R U' R"
     pll_ub = "R' U R' U' R' U' R' U R U R2"
     pll_h = "R2 U2 R U2 R2 U2 R2 U2 R U2 R2"
