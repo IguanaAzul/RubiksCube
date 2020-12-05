@@ -80,7 +80,7 @@ def scramble_generator(length):
             scramble[idx] += 6
         elif odds < 200:
             scramble[idx] += 12
-    return " ".join([int_to_turn[i] for i in scramble])
+    return fix_scramble(" ".join([int_to_turn[i] for i in scramble]))
 
 
 def fix_scramble(scramble):

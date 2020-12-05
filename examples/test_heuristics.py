@@ -1,7 +1,9 @@
 from solvers.four_phase import four_phase
 from rubiks_cube import rubiks_cube
+from utils import scramble_generator
 
-scramble = "R B R2 F U' L2 D L' U2 R' D' F2 L F' D2 B2 U B'"
+# scramble = "R B R2 F U' L2 D L' U2 R' D' F2 L F' D2 B2 U B'"
+scramble = scramble_generator(30)
 cube = rubiks_cube.Cube()
 print(scramble)
 cube.scramble(scramble)

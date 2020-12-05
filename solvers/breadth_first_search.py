@@ -22,26 +22,31 @@ def successors(old_moves, cube, allowed_moves, last_move):
             openning_node_cube.scramble(move)
             moves = list(old_moves)
             moves.append(move)
-            cubes.append((moves, openning_node_cube.compress_cube()))
+            cubes.append((moves, openning_node_cube))
     return cubes
 
 
 def bfs(cube, check_function, allowed_moves):
     cube_node = Cube()
     cube_node.set_cube((cube.get_color_matrix().copy(), cube.get_pieces().copy()))
-    path = [([""], cube_node.compress_cube())]
-    return search(path, check_function, allowed_moves, 1)
+    path = [([""], cube_node)]
+    return search(path, check_function, allowed_moves)
 
 
-def search(layer, check_function, allowed_moves, lvl):
-    new_layer = list()
-    print(lvl)
-    for node in layer:
-        cube = Cube()
-        cube.decompress_cube(node[1])
-        if check_function(cube):
-            return node[0], cube
-        for suc in successors(node[0], cube, allowed_moves, node[0][-1]):
-            new_layer.append(suc)
-    del layer
-    return search(new_layer, check_function, allowed_moves)
+def search(path, check_function, allowed_moves):
+    done = check_function(path[-1][1])
+    layer = [path[-1]]
+    lvl = 1
+    while not done:
+        print(lvl)
+        new_layer = list()
+        for node in layer:
+            for suc in successors(node[0], node[1], allowed_moves, node[0][-1]):
+                done = check_function(suc[1])
+                if done:
+                    return suc[0], suc[1]
+                new_layer.append(suc)
+        layer = new_layer.copy()
+        del new_layer
+        lvl += 1
+    return path
