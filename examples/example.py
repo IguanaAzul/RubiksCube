@@ -1,6 +1,5 @@
 from rubiks_cube import rubiks_cube
 from utils import scramble_generator
-from solvers import cfop, four_phase
 
 
 # Create new cube object
@@ -13,13 +12,3 @@ print(scramble)
 # Example of scramble
 cube.scramble("R B R2 F U' L2 D L' U2 R' D' F2 L F' D2 B2 U B'")
 cube.print()
-
-# Solving the cube with CFOP method:
-solution, solved_cube = cfop(cube)
-print(solution)
-solved_cube.print()
-
-# Solving the cube with four-phase Thistlewaite (Takes several hours)
-solution, solved_cube = four_phase(cube)
-print(solution)
-solved_cube.print()
